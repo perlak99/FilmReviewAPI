@@ -1,5 +1,5 @@
 ﻿using FilmReviewAPI.Interfaces;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FilmReviewAPI.Controllers
@@ -15,10 +15,10 @@ namespace FilmReviewAPI.Controllers
             _filmService = filmService;
         }
 
-        //[HttpGet("{id}")]
-        //public async Task<IActionResult> getFilm(int id)
-        //{
-
-        //}
+        [HttpGet("{id}"), Authorize(Roles = "Admin")]
+        public async Task<IActionResult> getFilm(int id)
+        {
+            return Ok("Hello");
+        }
     }
 }

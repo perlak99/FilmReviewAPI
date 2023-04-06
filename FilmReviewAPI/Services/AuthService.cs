@@ -1,6 +1,7 @@
 ﻿using FilmReviewAPI.DAL;
 using FilmReviewAPI.Interfaces;
 using FilmReviewAPI.Models;
+using FilmReviewAPI.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -24,22 +25,33 @@ namespace FilmReviewAPI.Services
 
         public async Task<string> AuthenticateUserAsync(string username, string password)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Username == username);
+            var user = await _dbContext.Users
+                .Include(x => x.Roles)
+                .FirstOrDefaultAsync(x => x.Username == username);
 
-            if (user == null || !VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
+            if (user == null || !PasswordHashUtils.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
-                return null;
+                throw new Exception("Wrong username or password");
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
+
+            var claims = new List<Claim> {                       
+                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) 
+            };
+
+            var userRoles = user.Roles.Select(x => new Claim(ClaimTypes.Role, x.Name)).ToList();
+            if (userRoles != null && userRoles.Any())
+            {
+                claims.AddRange(userRoles);
+            }
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(
-                    new Claim[]
-                    {
-                        new Claim(ClaimTypes.Name, user.Id.ToString())
-                    }),
+                    claims),
                     Expires = DateTime.UtcNow.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature),
                     Issuer = _configuration["Jwt:Issuer"],
@@ -56,7 +68,7 @@ namespace FilmReviewAPI.Services
                 throw new Exception("Username \"" + username + "\" is already taken");
             }
 
-            CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+            PasswordHashUtils.CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
 
             var user = new User
             {
@@ -65,33 +77,16 @@ namespace FilmReviewAPI.Services
                 PasswordSalt = passwordSalt
             };
 
+            var userRole = await _dbContext.Roles.FirstOrDefaultAsync(x => x.Name == "User");
+            if (userRole != null)
+            {
+                user.Roles = new List<Role>() { userRole };
+            }
+
             await _dbContext.Users.AddAsync(user);
             await _dbContext.SaveChangesAsync();
 
             return user;
-        }
-
-        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using var hmac = new HMACSHA512();
-            passwordSalt = hmac.Key;
-            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-        }
-
-        private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using var hmac = new HMACSHA512(passwordSalt);
-            var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-            for (var i = 0; i < computedHash.Length; i++)
-            {
-                if (computedHash[i] != passwordHash[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
         }
     }
 }

@@ -42,13 +42,5 @@ namespace FilmReviewAPI.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-
-        [HttpGet("testEndPoint")]
-        [Authorize]
-        public async Task<IActionResult> TestEndPoint()
-        {
-            return Ok(new { message = "hello" });
-        }
-
     }
 }
