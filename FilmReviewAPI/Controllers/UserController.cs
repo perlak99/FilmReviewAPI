@@ -42,5 +42,19 @@ namespace FilmReviewAPI.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
+
+        [HttpPost("grantRole")]
+        public async Task<IActionResult> GrantRole(int userId, int roleId)
+        {
+            try
+            {
+                await _authService.GrantRole(userId, roleId);
+                return Ok(new { message = "Role granted" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
     }
 }

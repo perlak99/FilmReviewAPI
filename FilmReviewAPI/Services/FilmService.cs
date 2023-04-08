@@ -1,14 +1,43 @@
-﻿using FilmReviewAPI.DTOs;
+﻿using AutoMapper;
+using FilmReviewAPI.DAL;
+using FilmReviewAPI.DTOs;
 using FilmReviewAPI.Interfaces;
 using FilmReviewAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace FilmReviewAPI.Services
 {
     public class FilmService : IFilmService
     {
-        public Task<Film> AddFilmAsync(FilmDto request)
+        private readonly IMapper _mapper;
+        private readonly FilmReviewDbContext _dbContext;
+
+        public FilmService(IMapper mapper, FilmReviewDbContext dbContext)
         {
-            throw new NotImplementedException();
+            _dbContext = dbContext;
+            _mapper = mapper;
+        }
+
+        public async Task AddFilmAsync(FilmDto request)
+        {
+            var genre = await _dbContext.Genres.FirstOrDefaultAsync(x => x.Id == request.GenreId);
+            if (genre == null)
+            {
+                throw new Exception("Genre not found");
+            }
+
+            if (request.DirectorId != null)
+            {
+                var director = await _dbContext.Directors.FirstOrDefaultAsync(x => x.Id == request.DirectorId);
+                if (director == null)
+                {
+                    throw new Exception("Director not found");
+                }
+            }
+
+            var film = _mapper.Map<Film>(request);
+            await _dbContext.AddAsync(film);
+            await _dbContext.SaveChangesAsync();
         }
 
         public Task<Film> DeleteFilmAsync(int id)

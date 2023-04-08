@@ -17,6 +17,11 @@ namespace FilmReviewAPI.DAL
                 .WithMany(c => c.Users)
                 .UsingEntity(j => j.ToTable("RoleUser"));
 
+            modelBuilder.Entity<Film>()
+                .Property(f => f.DirectorId)
+                .IsRequired(false);
+
+            // GENERATING DATA
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Admin" },
                 new Role { Id = 2, Name = "User" }
@@ -47,6 +52,19 @@ namespace FilmReviewAPI.DAL
                             new { UserId = 1, RoleId = 1 }
                         );
                     });
+
+            modelBuilder.Entity<Genre>().HasData(
+                new Genre
+                {
+                    Id = 1,
+                    Name = "Comedy"
+                },
+                new Genre
+                {
+                    Id = 2,
+                    Name = "Horror"
+                }
+            );
         }
 
         public DbSet<User> Users { get; set; }

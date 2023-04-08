@@ -1,4 +1,5 @@
-﻿using FilmReviewAPI.Interfaces;
+﻿using FilmReviewAPI.DTOs;
+using FilmReviewAPI.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,10 +16,18 @@ namespace FilmReviewAPI.Controllers
             _filmService = filmService;
         }
 
-        [HttpGet("{id}"), Authorize(Roles = "Admin")]
-        public async Task<IActionResult> getFilm(int id)
+        [HttpPost("addFilm"), Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AddFilm (FilmDto filmDto)
         {
-            return Ok("Hello");
+            try
+            {
+                await _filmService.AddFilmAsync(filmDto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
 }

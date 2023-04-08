@@ -7,5 +7,7 @@ namespace FilmReviewAPI.Interfaces
         Task<string> AuthenticateUserAsync(string username, string password);
 
         Task<User> RegisterUserAsync(string username, string password);
+
+        Task GrantRole(int userId, int roleId);
     }
 }

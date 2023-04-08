@@ -8,6 +8,5 @@ namespace FilmReviewAPI.DTOs
         public int ReleaseYear { get; set; }
         public int GenreId { get; set; }
         public int? DirectorId { get; set; }
-        public ICollection<Comment> Comments { get; set; }
     }
 }

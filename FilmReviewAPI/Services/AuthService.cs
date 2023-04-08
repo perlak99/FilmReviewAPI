@@ -88,5 +88,24 @@ namespace FilmReviewAPI.Services
 
             return user;
         }
+
+        public async Task GrantRole(int userId, int roleId)
+        {
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            if (user == null)
+            {
+                throw new Exception("Username doesn't exist");
+            }
+
+            var role = await _dbContext.Roles.FirstOrDefaultAsync(x => x.Id == roleId);
+            if (role == null)
+            {
+                throw new Exception("Role doesn't exist");
+            }
+
+            user.Roles.Add(role);
+
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }
