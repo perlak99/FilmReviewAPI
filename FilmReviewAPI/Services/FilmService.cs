@@ -18,7 +18,7 @@ namespace FilmReviewAPI.Services
             _mapper = mapper;
         }
 
-        public async Task AddFilmAsync(FilmDto request)
+        public async Task AddFilmAsync(AddFilmDto request)
         {
             var genre = await _dbContext.Genres.FirstOrDefaultAsync(x => x.Id == request.GenreId);
             if (genre == null)
@@ -40,24 +40,76 @@ namespace FilmReviewAPI.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public Task<Film> DeleteFilmAsync(int id)
+        public async Task DeleteFilmAsync(int id)
         {
-            throw new NotImplementedException();
+            var film = await _dbContext.Films.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (film == null)
+            {
+                throw new Exception("Film not found");
+            }
+
+            _dbContext.Films.Remove(film);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task<List<Film>> GetAllFilms()
+        public async Task UpdateFilmAsync(UpdateFilmDto request)
         {
-            throw new NotImplementedException();
+            var film = await _dbContext.Films.FirstOrDefaultAsync(x => x.Id == request.Id);
+
+            if (film == null)
+            {
+                throw new Exception("Film not found");
+            }
+
+            var genre = await _dbContext.Genres.FirstOrDefaultAsync(x => x.Id == request.GenreId);
+            if (genre == null)
+            {
+                throw new Exception("Genre not found");
+            }
+
+            if (request.DirectorId != null)
+            {
+                var director = await _dbContext.Directors.FirstOrDefaultAsync(x => x.Id == request.DirectorId);
+                if (director == null)
+                {
+                    throw new Exception("Director not found");
+                }
+            }
+
+            film = _mapper.Map<Film>(request);
+
+            await _dbContext.SaveChangesAsync();
         }
 
-        public Task<Film> GetFilmAsync(int id)
+        public async Task<List<FilmListDto>> GetFilmsAsync(int page, int pageSize)
         {
-            throw new NotImplementedException();
+            int skipCount = (page - 1) * pageSize;
+
+            var films = await _dbContext.Films
+                .Include(f => f.Genre)
+                .Include(f => f.Director)
+                .Skip(skipCount)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return _mapper.Map<List<FilmListDto>>(films);
         }
 
-        public Task<Film> UpdateFilmAsync(FilmDto request)
+        public async Task<GetFilmDto> GetFilmAsync(int id)
         {
-            throw new NotImplementedException();
+            var film = await _dbContext.Films
+                .Include(f => f.Genre)
+                .Include(f => f.Director)
+                .Include(f => f.Comments)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            if (film == null)
+            {
+                throw new Exception("Film not found");
+            }
+
+            return _mapper.Map<GetFilmDto>(film);
         }
     }
 }

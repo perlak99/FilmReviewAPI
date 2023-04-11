@@ -91,7 +91,10 @@ namespace FilmReviewAPI.Services
 
         public async Task GrantRole(int userId, int roleId)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            var user = await _dbContext.Users
+                .Include(x => x.Roles)
+                .FirstOrDefaultAsync(x => x.Id == userId);
+
             if (user == null)
             {
                 throw new Exception("Username doesn't exist");
@@ -103,6 +106,11 @@ namespace FilmReviewAPI.Services
                 throw new Exception("Role doesn't exist");
             }
 
+            if (user.Roles.FirstOrDefault(x => x.Id == roleId) != null)
+            {
+                throw new Exception("Role already granted");
+            }
+            
             user.Roles.Add(role);
 
             await _dbContext.SaveChangesAsync();

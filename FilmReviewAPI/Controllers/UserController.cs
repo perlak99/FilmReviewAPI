@@ -19,14 +19,15 @@ namespace FilmReviewAPI.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticateDto request)
         {
-            var token = await _authService.AuthenticateUserAsync(request.Username, request.Password);
-
-            if (token == null)
+            try
             {
-                return BadRequest(new { message = "Invalid username or password" });
+                var token = await _authService.AuthenticateUserAsync(request.Username, request.Password);
+                return Ok(new { token });
             }
-
-            return Ok(new { token });
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
 
         [HttpPost("register")]
@@ -43,7 +44,7 @@ namespace FilmReviewAPI.Controllers
             }
         }
 
-        [HttpPost("grantRole")]
+        [HttpPost("grantRole"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> GrantRole(int userId, int roleId)
         {
             try

@@ -8,7 +8,9 @@ namespace FilmReviewAPI
     {
         public AutoMapperProfile()
         {
-            CreateMap<FilmDto, Film>();
+            CreateMap<AddFilmDto, Film>();
+            CreateMap<Film, FilmListDto>();
+            CreateMap<Film, GetFilmDto>();
         }
     }
 }
