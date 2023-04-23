@@ -1,7 +1,7 @@
 ﻿using FilmReviewAPI.DTOs;
 using FilmReviewAPI.Models;
 
-namespace FilmReviewAPI.Interfaces
+namespace FilmReviewAPI.Services.Interfaces
 {
     public interface IFilmService
     {

@@ -1,33 +1,30 @@
-﻿using FilmReviewAPI.DAL;
-using FilmReviewAPI.Interfaces;
-using FilmReviewAPI.Models;
+﻿using FilmReviewAPI.Models;
+using FilmReviewAPI.Repositories.Interfaces;
+using FilmReviewAPI.Services.Interfaces;
 using FilmReviewAPI.Utils;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace FilmReviewAPI.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly FilmReviewDbContext _dbContext;
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IConfiguration _configuration;
 
-        public AuthService(FilmReviewDbContext dbContext, IConfiguration configuration)
+        public AuthService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration)
         {
-            _dbContext = dbContext;
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
             _configuration = configuration;
         }
 
         public async Task<string> AuthenticateUserAsync(string username, string password)
         {
-            var user = await _dbContext.Users
-                .Include(x => x.Roles)
-                .FirstOrDefaultAsync(x => x.Username == username);
+            var user = await _userRepository.GetUserWithRolesByUsernameAsync(username);
 
             if (user == null || !PasswordHashUtils.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
@@ -63,7 +60,7 @@ namespace FilmReviewAPI.Services
 
         public async Task<User> RegisterUserAsync(string username, string password)
         {
-            if (await _dbContext.Users.FirstOrDefaultAsync(x => x.Username == username) != null)
+            if (await _userRepository.GetUserWithRolesByUsernameAsync(username) != null)
             {
                 throw new Exception("Username \"" + username + "\" is already taken");
             }
@@ -77,30 +74,27 @@ namespace FilmReviewAPI.Services
                 PasswordSalt = passwordSalt
             };
 
-            var userRole = await _dbContext.Roles.FirstOrDefaultAsync(x => x.Name == "User");
+            var userRole = await _roleRepository.GetRoleByNameAsync("User");
             if (userRole != null)
             {
                 user.Roles = new List<Role>() { userRole };
             }
 
-            await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
+            await _userRepository.AddUserAsync(user);
 
             return user;
         }
 
         public async Task GrantRole(int userId, int roleId)
         {
-            var user = await _dbContext.Users
-                .Include(x => x.Roles)
-                .FirstOrDefaultAsync(x => x.Id == userId);
+            var user = await _userRepository.GetUserWithRolesByIdAsync(userId);
 
             if (user == null)
             {
                 throw new Exception("Username doesn't exist");
             }
 
-            var role = await _dbContext.Roles.FirstOrDefaultAsync(x => x.Id == roleId);
+            var role = await _roleRepository.GetRoleByIdAsync(roleId);
             if (role == null)
             {
                 throw new Exception("Role doesn't exist");
@@ -110,10 +104,8 @@ namespace FilmReviewAPI.Services
             {
                 throw new Exception("Role already granted");
             }
-            
-            user.Roles.Add(role);
 
-            await _dbContext.SaveChangesAsync();
+            await _userRepository.AddRoleToUserAsync(user, role);
         }
     }
 }
