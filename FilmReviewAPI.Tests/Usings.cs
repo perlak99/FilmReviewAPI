@@ -1,9 +1,8 @@
 global using Xunit;
 global using AutoMapper;
-global using FilmReviewAPI;
-global using FilmReviewAPI.DAL;
 global using FilmReviewAPI.DTOs;
 global using FilmReviewAPI.Models;
 global using FilmReviewAPI.Services;
-global using Microsoft.EntityFrameworkCore;
-global using FilmReviewAPI.Interfaces;
+global using Moq;
+global using FilmReviewAPI.Repositories.Interfaces;
+global using FilmReviewAPI;
