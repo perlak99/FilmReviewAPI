@@ -81,6 +81,7 @@ namespace FilmReviewAPI.Services
             }
 
             await _userRepository.AddUserAsync(user);
+            await _userRepository.SaveAsync();
 
             return user;
         }
@@ -105,7 +106,9 @@ namespace FilmReviewAPI.Services
                 throw new Exception("Role already granted");
             }
 
-            await _userRepository.AddRoleToUserAsync(user, role);
+            user.Roles.Add(role);
+
+            await _userRepository.SaveAsync();
         }
     }
 }

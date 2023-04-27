@@ -17,7 +17,6 @@ namespace FilmReviewAPI.Repositories
         public async Task AddFilmAsync(Film film)
         {
             await _dbContext.AddAsync(film);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<Film> GetFilmByIdAsync(int id)
@@ -28,7 +27,6 @@ namespace FilmReviewAPI.Repositories
         public async Task DeleteFilmAsync(Film film)
         {
             _dbContext.Films.Remove(film);
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task SaveAsync()

@@ -40,6 +40,7 @@ namespace FilmReviewAPI.Services
 
             var film = _mapper.Map<Film>(request);
             await _filmRepository.AddFilmAsync(film);
+            await _filmRepository.SaveAsync();
         }
 
         public async Task DeleteFilmAsync(int id)
@@ -52,6 +53,7 @@ namespace FilmReviewAPI.Services
             }
 
             await _filmRepository.DeleteFilmAsync(film);
+            await _filmRepository.SaveAsync();
         }
 
         public async Task UpdateFilmAsync(UpdateFilmDto request)

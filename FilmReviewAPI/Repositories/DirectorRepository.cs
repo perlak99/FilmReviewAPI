@@ -19,5 +19,10 @@ namespace FilmReviewAPI.Repositories
             return await _dbContext.Directors
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task SaveAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }

@@ -1,23 +1,21 @@
 ﻿using FilmReviewAPI.DAL;
 using FilmReviewAPI.Models;
 using FilmReviewAPI.Repositories.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace FilmReviewAPI.Repositories
 {
-    public class GenreRepository : IGenreRepository
+    public class RatingRepository : IRatingRepository
     {
         private readonly FilmReviewDbContext _dbContext;
 
-        public GenreRepository(FilmReviewDbContext dbContext)
+        public RatingRepository(FilmReviewDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<Genre> GetGenreByIdAsync(int id)
+        public async Task AddRatingAsync(Rating rating)
         {
-            return await _dbContext.Genres
-                .FirstOrDefaultAsync(x => x.Id == id);
+            await _dbContext.Ratings.AddAsync(rating);
         }
 
         public async Task SaveAsync()

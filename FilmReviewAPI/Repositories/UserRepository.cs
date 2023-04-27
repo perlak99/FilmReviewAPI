@@ -31,12 +31,10 @@ namespace FilmReviewAPI.Repositories
         public async Task AddUserAsync(User user)
         {
             await _dbContext.Users.AddAsync(user);
-            await _dbContext.SaveChangesAsync();
         }
 
-        public async Task AddRoleToUserAsync(User user, Role role)
+        public async Task SaveAsync()
         {
-            user.Roles.Add(role);
             await _dbContext.SaveChangesAsync();
         }
     }

@@ -25,5 +25,10 @@ namespace FilmReviewAPI.Repositories
             return await _dbContext.Roles
                 .FirstOrDefaultAsync(x => x.Name == name);
         }
+
+        public async Task SaveAsync()
+        {
+            await _dbContext.SaveChangesAsync();
+        }
     }
 }
