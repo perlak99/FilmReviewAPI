@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FilmReviewAPI.DTOs;
+using FilmReviewAPI.DTOs.Film;
 using FilmReviewAPI.Models;
 using FilmReviewAPI.Repositories.Interfaces;
 using FilmReviewAPI.Services.Interfaces;
@@ -103,7 +103,10 @@ namespace FilmReviewAPI.Services
                 throw new Exception("Film not found");
             }
 
-            return _mapper.Map<GetFilmDto>(film);
+            var filmDto = _mapper.Map<GetFilmDto>(film);
+            filmDto.AverageRating = film.Ratings.Any() ? film.Ratings.Average(r => r.Value) : 0;
+
+            return filmDto;
         }
     }
 }

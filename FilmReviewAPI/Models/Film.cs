@@ -10,6 +10,7 @@ namespace FilmReviewAPI.Models
         public int GenreId { get; set; }
         public int? DirectorId { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
 
         [ForeignKey("GenreId")]
         public Genre Genre { get; set; }

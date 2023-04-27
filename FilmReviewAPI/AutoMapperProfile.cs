@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
-using FilmReviewAPI.DTOs;
+using FilmReviewAPI.DTOs.Film;
+using FilmReviewAPI.DTOs.Rating;
 using FilmReviewAPI.Models;
 
 namespace FilmReviewAPI
@@ -8,9 +9,13 @@ namespace FilmReviewAPI
     {
         public AutoMapperProfile()
         {
+            //Film
             CreateMap<AddFilmDto, Film>();
             CreateMap<Film, FilmListDto>();
             CreateMap<Film, GetFilmDto>();
+
+            //Rating
+            CreateMap<AddRatingDto, Rating>();
         }
     }
 }

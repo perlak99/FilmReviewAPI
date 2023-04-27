@@ -38,6 +38,19 @@ namespace FilmReviewAPI.DAL
                 }
             );
 
+            modelBuilder.Entity<Genre>().HasData(
+                new Genre
+                {
+                    Id = 1,
+                    Name = "Comedy"
+                },
+                new Genre
+                {
+                    Id = 2,
+                    Name = "Horror"
+                }
+            );
+
             modelBuilder.Entity<User>()
                 .HasMany(x => x.Roles)
                 .WithMany(x => x.Users)
@@ -52,19 +65,6 @@ namespace FilmReviewAPI.DAL
                             new { UserId = 1, RoleId = 1 }
                         );
                     });
-
-            modelBuilder.Entity<Genre>().HasData(
-                new Genre
-                {
-                    Id = 1,
-                    Name = "Comedy"
-                },
-                new Genre
-                {
-                    Id = 2,
-                    Name = "Horror"
-                }
-            );
         }
 
         public DbSet<User> Users { get; set; }

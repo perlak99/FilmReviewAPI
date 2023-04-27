@@ -14,6 +14,18 @@ namespace FilmReviewAPI.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<User> GetUserByUsernameAsync(string username)
+        {
+            return await _dbContext.Users
+                .FirstOrDefaultAsync(x => x.Username == username);
+        }
+
+        public async Task<User> GetUserByIdAsync(int id)
+        {
+            return await _dbContext.Users
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<User> GetUserWithRolesByUsernameAsync(string username)
         {
             return await _dbContext.Users
@@ -37,5 +49,6 @@ namespace FilmReviewAPI.Repositories
         {
             await _dbContext.SaveChangesAsync();
         }
+
     }
 }

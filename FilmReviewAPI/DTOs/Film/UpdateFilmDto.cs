@@ -1,4 +1,4 @@
-﻿namespace FilmReviewAPI.DTOs
+﻿namespace FilmReviewAPI.DTOs.Film
 {
     public class UpdateFilmDto
     {

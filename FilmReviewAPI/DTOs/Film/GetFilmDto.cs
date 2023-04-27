@@ -1,6 +1,6 @@
 ﻿using FilmReviewAPI.Models;
 
-namespace FilmReviewAPI.DTOs
+namespace FilmReviewAPI.DTOs.Film
 {
     public class GetFilmDto
     {
@@ -8,6 +8,7 @@ namespace FilmReviewAPI.DTOs
         public string Title { get; set; }
         public int ReleaseYear { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public decimal AverageRating { get; set; }
 
         public Genre Genre { get; set; }
 

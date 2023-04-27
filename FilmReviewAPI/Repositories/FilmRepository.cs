@@ -50,6 +50,7 @@ namespace FilmReviewAPI.Repositories
                 .Include(f => f.Genre)
                 .Include(f => f.Director)
                 .Include(f => f.Comments)
+                .Include(f => f.Ratings)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
     }

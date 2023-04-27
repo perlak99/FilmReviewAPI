@@ -7,7 +7,7 @@ namespace FilmReviewAPI.Models
     {
         public int Id { get; set; }
         [Range(1,10)]
-        public int Value { get; set; }
+        public decimal Value { get; set; }
         public int UserId { get; set; }
         public int FilmId { get; set; }
 

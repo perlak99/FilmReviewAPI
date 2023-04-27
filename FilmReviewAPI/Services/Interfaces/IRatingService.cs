@@ -1,7 +1,9 @@
-﻿namespace FilmReviewAPI.Services.Interfaces
+﻿using FilmReviewAPI.DTOs.Rating;
+
+namespace FilmReviewAPI.Services.Interfaces
 {
     public interface IRatingService
     {
-        public Task AddRating();
+        public Task AddRatingAsync(AddRatingDto request, int userId);
     }
 }

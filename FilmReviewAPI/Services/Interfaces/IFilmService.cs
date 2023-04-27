@@ -1,4 +1,4 @@
-﻿using FilmReviewAPI.DTOs;
+﻿using FilmReviewAPI.DTOs.Film;
 using FilmReviewAPI.Models;
 
 namespace FilmReviewAPI.Services.Interfaces

@@ -1,6 +1,6 @@
 ﻿using FilmReviewAPI.Models;
 
-namespace FilmReviewAPI.DTOs
+namespace FilmReviewAPI.DTOs.Film
 {
     public class AddFilmDto
     {

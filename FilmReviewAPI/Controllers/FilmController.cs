@@ -1,4 +1,4 @@
-﻿using FilmReviewAPI.DTOs;
+﻿using FilmReviewAPI.DTOs.Film;
 using FilmReviewAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

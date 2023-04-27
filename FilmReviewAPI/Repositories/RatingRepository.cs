@@ -1,6 +1,7 @@
 ﻿using FilmReviewAPI.DAL;
 using FilmReviewAPI.Models;
 using FilmReviewAPI.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace FilmReviewAPI.Repositories
 {
@@ -21,6 +22,11 @@ namespace FilmReviewAPI.Repositories
         public async Task SaveAsync()
         {
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<Rating> FindRatingByUserAndFilm(int filmId, int userId)
+        {
+           return await _dbContext.Ratings.FirstOrDefaultAsync(x => x.FilmId == filmId && x.UserId == userId);
         }
     }
 }
