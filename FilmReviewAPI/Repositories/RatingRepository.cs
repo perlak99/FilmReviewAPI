@@ -24,7 +24,7 @@ namespace FilmReviewAPI.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<Rating> FindRatingByUserAndFilm(int filmId, int userId)
+        public async Task<Rating> FindRatingByUserAndFilmAsync(int filmId, int userId)
         {
            return await _dbContext.Ratings.FirstOrDefaultAsync(x => x.FilmId == filmId && x.UserId == userId);
         }

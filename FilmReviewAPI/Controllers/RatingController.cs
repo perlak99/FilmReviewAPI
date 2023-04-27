@@ -2,6 +2,7 @@
 using FilmReviewAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FilmReviewAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace FilmReviewAPI.Controllers
         {
             try
             {
-                var userId = int.Parse(User.Claims.First(i => i.Type == "UserId").Value);
+                var userId = int.Parse(User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value);
                 await _ratingService.AddRatingAsync(ratingDto, userId);
                 return Ok();
             }

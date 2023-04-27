@@ -37,12 +37,13 @@ namespace FilmReviewAPI.Services
                 throw new Exception("Film not found");
             }
 
-            if (_ratingRepository.FindRatingByUserAndFilm(request.FilmId, userId) != null)
+            if (await _ratingRepository.FindRatingByUserAndFilmAsync(request.FilmId, userId) != null)
             {
                 throw new Exception("Film is already rated by this user");
             }
 
             var rating = _mapper.Map<Rating>(request);
+            rating.UserId = userId;
             await _ratingRepository.AddRatingAsync(rating);
             await _ratingRepository.SaveAsync();
         }
