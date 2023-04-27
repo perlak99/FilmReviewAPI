@@ -73,7 +73,7 @@ namespace FilmReviewAPI.DAL
         public DbSet<Film> Films { get; set; }
         public DbSet<Director> Directors { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public object AuthService { get; }
+        public DbSet<Rating> Ratings { get; set; }
     }
 
 }
