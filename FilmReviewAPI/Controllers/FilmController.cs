@@ -45,11 +45,11 @@ namespace FilmReviewAPI.Controllers
         }
 
         [HttpGet("getFilms")]
-        public async Task<IActionResult> GetFilms(int page, int pageSize)
+        public async Task<IActionResult> GetFilms(GetFilmsFilterDto filter)
         {
             try
             {
-                var films = await _filmService.GetFilmsAsync(page, pageSize);
+                var films = await _filmService.GetFilmsAsync(filter);
                 return Ok(films);
             }
             catch (Exception ex)

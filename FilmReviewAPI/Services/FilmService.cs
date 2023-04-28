@@ -85,11 +85,9 @@ namespace FilmReviewAPI.Services
             await _filmRepository.SaveAsync();
         }
 
-        public async Task<List<FilmListDto>> GetFilmsAsync(int page, int pageSize)
+        public async Task<List<FilmListDto>> GetFilmsAsync(GetFilmsFilterDto filter)
         {
-            int skipCount = (page - 1) * pageSize;
-
-            var films = await _filmRepository.GetFilmsAsync(skipCount, pageSize);
+            var films = await _filmRepository.GetFilmsAsync(filter);
 
             return _mapper.Map<List<FilmListDto>>(films);
         }

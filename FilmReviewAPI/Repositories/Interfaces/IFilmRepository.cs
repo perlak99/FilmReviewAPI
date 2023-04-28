@@ -1,4 +1,5 @@
-﻿using FilmReviewAPI.Models;
+﻿using FilmReviewAPI.DTOs.Film;
+using FilmReviewAPI.Models;
 
 namespace FilmReviewAPI.Repositories.Interfaces
 {
@@ -7,7 +8,7 @@ namespace FilmReviewAPI.Repositories.Interfaces
         public Task AddFilmAsync(Film film);
         public Task<Film> GetFilmByIdAsync(int id);
         public Task DeleteFilmAsync(Film film);
-        public Task<List<Film>> GetFilmsAsync(int page, int pageSize);
+        public Task<List<Film>> GetFilmsAsync(GetFilmsFilterDto filter);
         public Task<Film> GetFilmByIdWithDetails(int id);
     }
 }

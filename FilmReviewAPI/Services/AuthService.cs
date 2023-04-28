@@ -34,9 +34,9 @@ namespace FilmReviewAPI.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]);
 
-            var claims = new List<Claim> {                       
+            var claims = new List<Claim> {
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) 
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
             };
 
             var userRoles = user.Roles.Select(x => new Claim(ClaimTypes.Role, x.Name)).ToList();
