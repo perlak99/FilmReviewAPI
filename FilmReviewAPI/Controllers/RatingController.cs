@@ -20,16 +20,9 @@ namespace FilmReviewAPI.Controllers
         [HttpPost("addRating"), Authorize()]
         public async Task<IActionResult> AddRating(AddRatingDto ratingDto)
         {
-            try
-            {
-                var userId = int.Parse(User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value);
-                await _ratingService.AddRatingAsync(ratingDto, userId);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var userId = int.Parse(User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value);
+            await _ratingService.AddRatingAsync(ratingDto, userId);
+            return Ok();
         }
     }
 }

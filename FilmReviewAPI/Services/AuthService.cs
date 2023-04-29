@@ -28,7 +28,7 @@ namespace FilmReviewAPI.Services
 
             if (user == null || !PasswordHashUtils.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
-                throw new Exception("Wrong username or password");
+                throw new ArgumentException("Wrong username or password");
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -62,7 +62,7 @@ namespace FilmReviewAPI.Services
         {
             if (await _userRepository.GetUserWithRolesByUsernameAsync(username) != null)
             {
-                throw new Exception("Username \"" + username + "\" is already taken");
+                throw new ArgumentException("Username \"" + username + "\" is already taken");
             }
 
             PasswordHashUtils.CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
@@ -92,18 +92,18 @@ namespace FilmReviewAPI.Services
 
             if (user == null)
             {
-                throw new Exception("Username doesn't exist");
+                throw new ArgumentException("Username doesn't exist");
             }
 
             var role = await _roleRepository.GetRoleByIdAsync(roleId);
             if (role == null)
             {
-                throw new Exception("Role doesn't exist");
+                throw new ArgumentException("Role doesn't exist");
             }
 
             if (user.Roles.FirstOrDefault(x => x.Id == roleId) != null)
             {
-                throw new Exception("Role already granted");
+                throw new ArgumentException("Role already granted");
             }
 
             user.Roles.Add(role);

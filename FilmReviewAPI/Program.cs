@@ -9,6 +9,7 @@ using Swashbuckle.AspNetCore.Filters;
 using FilmReviewAPI.Services.Interfaces;
 using FilmReviewAPI.Repositories.Interfaces;
 using FilmReviewAPI.Repositories;
+using FilmReviewAPI.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,6 +67,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 

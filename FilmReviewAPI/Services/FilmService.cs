@@ -26,7 +26,7 @@ namespace FilmReviewAPI.Services
             var genre = await _genreRepository.GetGenreByIdAsync(request.GenreId);
             if (genre == null)
             {
-                throw new Exception("Genre not found");
+                throw new ArgumentException("Genre not found");
             }
 
             if (request.DirectorId != null)
@@ -34,7 +34,7 @@ namespace FilmReviewAPI.Services
                 var director = await _directorRepository.GetDirectorByIdAsync((int)request.DirectorId);
                 if (director == null)
                 {
-                    throw new Exception("Director not found");
+                    throw new ArgumentException("Director not found");
                 }
             }
 
@@ -49,7 +49,7 @@ namespace FilmReviewAPI.Services
 
             if (film == null)
             {
-                throw new Exception("Film not found");
+                throw new ArgumentException("Film not found");
             }
 
             await _filmRepository.DeleteFilmAsync(film);
@@ -62,13 +62,13 @@ namespace FilmReviewAPI.Services
 
             if (film == null)
             {
-                throw new Exception("Film not found");
+                throw new ArgumentException("Film not found");
             }
 
             var genre = await _genreRepository.GetGenreByIdAsync(request.GenreId);
             if (genre == null)
             {
-                throw new Exception("Genre not found");
+                throw new ArgumentException("Genre not found");
             }
 
             if (request.DirectorId != null)
@@ -76,7 +76,7 @@ namespace FilmReviewAPI.Services
                 var director = await _directorRepository.GetDirectorByIdAsync((int)request.DirectorId);
                 if (director == null)
                 {
-                    throw new Exception("Director not found");
+                    throw new ArgumentException("Director not found");
                 }
             }
 
@@ -98,7 +98,7 @@ namespace FilmReviewAPI.Services
 
             if (film == null)
             {
-                throw new Exception("Film not found");
+                throw new ArgumentException("Film not found");
             }
 
             var filmDto = _mapper.Map<GetFilmDto>(film);

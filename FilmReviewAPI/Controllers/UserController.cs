@@ -19,43 +19,22 @@ namespace FilmReviewAPI.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> AuthenticateAsync(AuthenticateDto request)
         {
-            try
-            {
-                var token = await _authService.AuthenticateUserAsync(request.Username, request.Password);
-                return Ok(new { token });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var token = await _authService.AuthenticateUserAsync(request.Username, request.Password);
+            return Ok(new { token });
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> RegisterAsync(RegisterDto request)
         {
-            try
-            {
-                var user = await _authService.RegisterUserAsync(request.Username, request.Password);
-                return Ok(new { message = "Registration successful" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var user = await _authService.RegisterUserAsync(request.Username, request.Password);
+            return Ok(new { message = "Registration successful" });
         }
 
         [HttpPost("grantRole"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> GrantRole(int userId, int roleId)
         {
-            try
-            {
-                await _authService.GrantRole(userId, roleId);
-                return Ok(new { message = "Role granted" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            await _authService.GrantRole(userId, roleId);
+            return Ok(new { message = "Role granted" });
         }
     }
 }

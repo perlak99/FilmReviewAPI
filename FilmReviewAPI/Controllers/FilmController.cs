@@ -19,71 +19,37 @@ namespace FilmReviewAPI.Controllers
         [HttpPost("addFilm"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddFilm (AddFilmDto filmDto)
         {
-            try
-            {
-                await _filmService.AddFilmAsync(filmDto);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            await _filmService.AddFilmAsync(filmDto);
+            return Ok();
         }
 
         [HttpGet("getFilm")]
         public async Task<IActionResult> GetFilm(int id)
         {
-            try
-            {
-                var film = await _filmService.GetFilmAsync(id);
-                return Ok(film);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var film = await _filmService.GetFilmAsync(id);
+            return Ok(film);
         }
 
         [HttpGet("getFilms")]
         public async Task<IActionResult> GetFilms(GetFilmsFilterDto filter)
         {
-            try
-            {
-                var films = await _filmService.GetFilmsAsync(filter);
-                return Ok(films);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new {message = ex.Message});
-            }
+            var films = await _filmService.GetFilmsAsync(filter);
+            return Ok(films);
+
         }
 
         [HttpDelete("deleteFilm"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteFilm(int id)
         {
-            try
-            {
-                await _filmService.DeleteFilmAsync(id);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            await _filmService.DeleteFilmAsync(id);
+            return Ok();
         }
 
         [HttpPut("updateFilm"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateFilms(UpdateFilmDto request)
         {
-            try
-            {
-                await _filmService.UpdateFilmAsync(request);
-                return Ok(new { message = "Film updated" });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            await _filmService.UpdateFilmAsync(request);
+            return Ok(new { message = "Film updated" });
         }
     }
 }
