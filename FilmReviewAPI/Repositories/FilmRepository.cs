@@ -7,33 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FilmReviewAPI.Repositories
 {
-    public class FilmRepository : IFilmRepository
+    public class FilmRepository : BaseRepository<Film>, IFilmRepository
     {
-        private readonly FilmReviewDbContext _dbContext;
-
-        public FilmRepository(FilmReviewDbContext dbContext)
+        public FilmRepository(FilmReviewDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
-        }
-
-        public async Task AddFilmAsync(Film film)
-        {
-            await _dbContext.AddAsync(film);
         }
 
         public async Task<Film> GetFilmByIdAsync(int id)
         {
             return await _dbContext.Films.FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public async Task DeleteFilmAsync(Film film)
-        {
-            _dbContext.Films.Remove(film);
-        }
-
-        public async Task SaveAsync()
-        {
-            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<Film>> GetFilmsAsync(GetFilmsFilterDto filter)
@@ -47,7 +29,7 @@ namespace FilmReviewAPI.Repositories
                 .Where(f => f.ReleaseYear >= filter.ReleaseYearFrom, filter.ReleaseYearFrom != null)
                 .Where(f => f.ReleaseYear <= filter.ReleaseYearTo, filter.ReleaseYearTo != null)
                 .Where(f => f.Ratings.Average(x => x.Value) >= filter.MinAverageRating, filter.MinAverageRating != null)
-                .Skip(filter.PageSize * filter.Page)
+                .Skip(filter.PageSize * (filter.Page - 1))
                 .Take(filter.PageSize);
 
             return await query.ToListAsync();

@@ -31,6 +31,7 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddScoped<IRatingService, RatingService>();
@@ -76,7 +77,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 
 app.UseAuthentication();
 

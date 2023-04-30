@@ -2,7 +2,7 @@
 
 namespace FilmReviewAPI.Repositories.Interfaces
 {
-    public interface IDirectorRepository : ISaveChanges
+    public interface IDirectorRepository : IBaseRepository<Director>
     {
         public Task<Director> GetDirectorByIdAsync(int id);
     }

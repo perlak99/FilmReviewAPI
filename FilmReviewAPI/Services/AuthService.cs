@@ -1,5 +1,5 @@
-﻿using FilmReviewAPI.Models;
-using FilmReviewAPI.Repositories.Interfaces;
+﻿using FilmReviewAPI.DAL;
+using FilmReviewAPI.Models;
 using FilmReviewAPI.Services.Interfaces;
 using FilmReviewAPI.Utils;
 using Microsoft.IdentityModel.Tokens;
@@ -11,20 +11,18 @@ namespace FilmReviewAPI.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserRepository _userRepository;
-        private readonly IRoleRepository _roleRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IConfiguration _configuration;
 
-        public AuthService(IUserRepository userRepository, IRoleRepository roleRepository, IConfiguration configuration)
+        public AuthService(IUnitOfWork unitOfWork, IConfiguration configuration)
         {
-            _userRepository = userRepository;
-            _roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
             _configuration = configuration;
         }
 
         public async Task<string> AuthenticateUserAsync(string username, string password)
         {
-            var user = await _userRepository.GetUserWithRolesByUsernameAsync(username);
+            var user = await _unitOfWork.UserRepository.GetUserWithRolesByUsernameAsync(username);
 
             if (user == null || !PasswordHashUtils.VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
@@ -60,7 +58,7 @@ namespace FilmReviewAPI.Services
 
         public async Task<User> RegisterUserAsync(string username, string password)
         {
-            if (await _userRepository.GetUserWithRolesByUsernameAsync(username) != null)
+            if (await _unitOfWork.UserRepository.GetUserWithRolesByUsernameAsync(username) != null)
             {
                 throw new ArgumentException("Username \"" + username + "\" is already taken");
             }
@@ -74,28 +72,28 @@ namespace FilmReviewAPI.Services
                 PasswordSalt = passwordSalt
             };
 
-            var userRole = await _roleRepository.GetRoleByNameAsync("User");
+            var userRole = await _unitOfWork.RoleRepository.GetRoleByNameAsync("User");
             if (userRole != null)
             {
                 user.Roles = new List<Role>() { userRole };
             }
 
-            await _userRepository.AddUserAsync(user);
-            await _userRepository.SaveAsync();
+            await _unitOfWork.UserRepository.AddAsync(user);
+            await _unitOfWork.SaveAsync();
 
             return user;
         }
 
         public async Task GrantRole(int userId, int roleId)
         {
-            var user = await _userRepository.GetUserWithRolesByIdAsync(userId);
+            var user = await _unitOfWork.UserRepository.GetUserWithRolesByIdAsync(userId);
 
             if (user == null)
             {
                 throw new ArgumentException("Username doesn't exist");
             }
 
-            var role = await _roleRepository.GetRoleByIdAsync(roleId);
+            var role = await _unitOfWork.RoleRepository.GetRoleByIdAsync(roleId);
             if (role == null)
             {
                 throw new ArgumentException("Role doesn't exist");
@@ -108,7 +106,7 @@ namespace FilmReviewAPI.Services
 
             user.Roles.Add(role);
 
-            await _userRepository.SaveAsync();
+            await _unitOfWork.SaveAsync();
         }
     }
 }

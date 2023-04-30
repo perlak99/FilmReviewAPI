@@ -1,51 +1,47 @@
 ﻿using AutoMapper;
+using FilmReviewAPI.DAL;
 using FilmReviewAPI.DTOs.Rating;
 using FilmReviewAPI.Models;
-using FilmReviewAPI.Repositories.Interfaces;
 using FilmReviewAPI.Services.Interfaces;
 
 namespace FilmReviewAPI.Services
 {
     public class RatingService : IRatingService
     {
-        private readonly IRatingRepository _ratingRepository;
-        private readonly IUserRepository _userRepository;
-        private readonly IFilmRepository _filmRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public RatingService(IRatingRepository ratingRepository, IUserRepository userRepository, IFilmRepository filmRepository, IMapper mapper)
+        public RatingService(IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _ratingRepository = ratingRepository;
-            _userRepository = userRepository;
-            _filmRepository = filmRepository;
+            _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
         public async Task AddRatingAsync(AddRatingDto request, int userId)
         {
-            var user = await _userRepository.GetUserByIdAsync(userId);
+            var user = await _unitOfWork.UserRepository.GetUserByIdAsync(userId);
 
             if (user == null)
             {
                 throw new ArgumentException("User not found");
             }
 
-            var film = await _filmRepository.GetFilmByIdAsync(request.FilmId);
+            var film = await _unitOfWork.FilmRepository.GetFilmByIdAsync(request.FilmId);
 
             if (film == null)
             {
                 throw new ArgumentException("Film not found");
             }
 
-            if (await _ratingRepository.FindRatingByUserAndFilmAsync(request.FilmId, userId) != null)
+            if (await _unitOfWork.RatingRepository.GetRatingByUserAndFilmAsync(request.FilmId, userId) != null)
             {
                 throw new ArgumentException("Film is already rated by this user");
             }
 
             var rating = _mapper.Map<Rating>(request);
             rating.UserId = userId;
-            await _ratingRepository.AddRatingAsync(rating);
-            await _ratingRepository.SaveAsync();
+            await _unitOfWork.RatingRepository.AddAsync(rating);
+            await _unitOfWork.SaveAsync();
         }
     }
 }

@@ -5,13 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FilmReviewAPI.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
-        private readonly FilmReviewDbContext _dbContext;
-
-        public UserRepository(FilmReviewDbContext dbContext)
+        public UserRepository(FilmReviewDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
         public async Task<User> GetUserByUsernameAsync(string username)
@@ -39,16 +36,5 @@ namespace FilmReviewAPI.Repositories
                 .Include(x => x.Roles)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
-
-        public async Task AddUserAsync(User user)
-        {
-            await _dbContext.Users.AddAsync(user);
-        }
-
-        public async Task SaveAsync()
-        {
-            await _dbContext.SaveChangesAsync();
-        }
-
     }
 }

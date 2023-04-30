@@ -31,7 +31,7 @@ namespace FilmReviewAPI.Controllers
         }
 
         [HttpGet("getFilms")]
-        public async Task<IActionResult> GetFilms(GetFilmsFilterDto filter)
+        public async Task<IActionResult> GetFilms([FromQuery] GetFilmsFilterDto filter)
         {
             var films = await _filmService.GetFilmsAsync(filter);
             return Ok(films);

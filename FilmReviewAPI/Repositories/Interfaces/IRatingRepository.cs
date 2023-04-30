@@ -2,9 +2,8 @@
 
 namespace FilmReviewAPI.Repositories.Interfaces
 {
-    public interface IRatingRepository : ISaveChanges
+    public interface IRatingRepository : IBaseRepository<Rating>
     {
-        public Task AddRatingAsync(Rating rating);
-        public Task<Rating> FindRatingByUserAndFilmAsync(int filmId, int userId);
+        public Task<Rating> GetRatingByUserAndFilmAsync(int filmId, int userId);
     }
 }

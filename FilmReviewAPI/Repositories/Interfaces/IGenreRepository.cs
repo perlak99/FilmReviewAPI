@@ -2,7 +2,7 @@
 
 namespace FilmReviewAPI.Repositories.Interfaces
 {
-    public interface IGenreRepository : ISaveChanges
+    public interface IGenreRepository : IBaseRepository<Genre>
     {
         public Task<Genre> GetGenreByIdAsync(int id);
     }

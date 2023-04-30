@@ -5,13 +5,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FilmReviewAPI.Repositories
 {
-    public class RoleRepository : IRoleRepository
+    public class RoleRepository : BaseRepository<Role>, IRoleRepository
     {
-        private readonly FilmReviewDbContext _dbContext;
-
-        public RoleRepository(FilmReviewDbContext dbContext)
+        public RoleRepository(FilmReviewDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
         public async Task<Role> GetRoleByIdAsync(int id)
@@ -24,11 +21,6 @@ namespace FilmReviewAPI.Repositories
         {
             return await _dbContext.Roles
                 .FirstOrDefaultAsync(x => x.Name == name);
-        }
-
-        public async Task SaveAsync()
-        {
-            await _dbContext.SaveChangesAsync();
         }
     }
 }

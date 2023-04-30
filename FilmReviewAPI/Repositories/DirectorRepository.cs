@@ -5,24 +5,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FilmReviewAPI.Repositories
 {
-    public class DirectorRepository : IDirectorRepository
+    public class DirectorRepository : BaseRepository<Director>, IDirectorRepository
     {
-        private readonly FilmReviewDbContext _dbContext;
-
-        public DirectorRepository(FilmReviewDbContext dbContext)
+        public DirectorRepository(FilmReviewDbContext dbContext) : base(dbContext)
         {
-            _dbContext = dbContext;
         }
 
         public async Task<Director> GetDirectorByIdAsync(int id)
         {
             return await _dbContext.Directors
                 .FirstOrDefaultAsync(x => x.Id == id);
-        }
-
-        public async Task SaveAsync()
-        {
-            await _dbContext.SaveChangesAsync();
         }
     }
 }
