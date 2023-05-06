@@ -10,8 +10,17 @@ using FilmReviewAPI.Services.Interfaces;
 using FilmReviewAPI.Repositories.Interfaces;
 using FilmReviewAPI.Repositories;
 using FilmReviewAPI.Middleware;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 

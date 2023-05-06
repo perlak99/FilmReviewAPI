@@ -1,4 +1,3 @@
-using FilmReviewAPI.DAL;
 using FilmReviewAPI.DTOs.Film;
 
 namespace FilmReviewAPI.Tests
