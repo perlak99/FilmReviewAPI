@@ -12,32 +12,55 @@ namespace FilmReviewAPI.DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>()
-                .HasMany(s => s.Roles)
-                .WithMany(c => c.Users)
-                .UsingEntity(j => j.ToTable("RoleUser"));
-
+            // CONFIGURATION
             modelBuilder.Entity<Film>()
-                .Property(f => f.DirectorId)
-                .IsRequired(false);
+                .HasMany(f => f.FavouriteUsers)
+                .WithMany(u => u.FavouriteFilms)
+                .UsingEntity<Dictionary<string, object>>(
+                    "FavouriteFilmUser",
+                    j => j.HasOne<User>().WithMany().HasForeignKey("UserId"),
+                    j => j.HasOne<Film>().WithMany().HasForeignKey("FilmId")
+                );
+
+            modelBuilder.Entity<User>()
+               .HasMany(u => u.AddedFilms)
+               .WithOne(f => f.AddedByUser)
+               .HasForeignKey(f => f.AddedByUserId)
+               .IsRequired()
+               .OnDelete(DeleteBehavior.Restrict);
 
             // GENERATING DATA
+            // ROLES
             modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "Admin" },
-                new Role { Id = 2, Name = "User" }
+                new Role { Id = 1, Name = "Admin" }
             );
 
+            // USERS
             PasswordHashUtils.CreatePasswordHash("admin", out var passwordHash, out var passwordSalt);
 
             modelBuilder.Entity<User>().HasData(
                 new User { 
                     Id = 1,
-                    Username = "Admin",
+                    Username = "admin",
                     PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt
+                    PasswordSalt = passwordSalt,
                 }
             );
 
+            // USERS ROLES
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Roles)
+                .WithMany(x => x.Users)
+                .UsingEntity<Dictionary<string, object>>("RoleUser",
+                    x => x.HasOne<Role>().WithMany().HasForeignKey("RoleId"),
+                    y => y.HasOne<User>().WithMany().HasForeignKey("UserId"),
+                    xy => {
+                        xy.HasKey("RoleId", "UserId");
+                        xy.HasData(new { UserId = 1, RoleId = 1 });
+                    }
+                );
+
+            // GENRES
             modelBuilder.Entity<Genre>().HasData(
                 new Genre
                 {
@@ -51,20 +74,18 @@ namespace FilmReviewAPI.DAL
                 }
             );
 
-            modelBuilder.Entity<User>()
-                .HasMany(x => x.Roles)
-                .WithMany(x => x.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                    "RoleUser",
-                    x => x.HasOne<Role>().WithMany().HasForeignKey("RoleId"),
-                    y => y.HasOne<User>().WithMany().HasForeignKey("UserId"),
-                    xy =>
-                    {
-                        xy.HasKey("RoleId", "UserId");
-                        xy.HasData(
-                            new { UserId = 1, RoleId = 1 }
-                        );
-                    });
+            // FILMS
+            modelBuilder.Entity<Film>().HasData(
+                new Film
+                {
+                    Id = 1,
+                    Title = "FilmTest",
+                    DirectorId = null,
+                    GenreId = 1,
+                    ReleaseYear = 2012,
+                    AddedByUserId = 1
+                }
+            );
         }
 
         public DbSet<User> Users { get; set; }
