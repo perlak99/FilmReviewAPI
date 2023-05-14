@@ -12,23 +12,21 @@ namespace FilmReviewAPI.Repositories
             _dbContext = dbContext;
         }
 
-        public virtual async Task AddAsync(T entity)
+        public async virtual Task AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public virtual void Update(T entity)
+        public async virtual Task UpdateAsync(T entity)
         {
             _dbContext.Set<T>().Update(entity);
+            await _dbContext.SaveChangesAsync();
         }
 
-        public virtual void Remove(T entity)
+        public async virtual Task RemoveAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
-        }
-
-        public virtual async Task SaveAsync()
-        {
             await _dbContext.SaveChangesAsync();
         }
     }

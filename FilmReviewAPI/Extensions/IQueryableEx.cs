@@ -1,6 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using FilmReviewAPI.Extensions;
+using System.Linq.Expressions;
 
-namespace FilmReviewAPI.Utils
+namespace FilmReviewAPI.Extensions
 {
     public static class IQueryableEx
     {

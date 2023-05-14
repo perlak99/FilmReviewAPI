@@ -20,7 +20,7 @@ namespace FilmReviewAPI.Controllers
         public async Task<IActionResult> AddFilm (AddFilmDto filmDto)
         {
             await _filmService.AddFilmAsync(filmDto);
-            return Ok();
+            return Ok(new { message = "Film added" });
         }
 
         [HttpGet("getFilm")]
@@ -42,7 +42,7 @@ namespace FilmReviewAPI.Controllers
         public async Task<IActionResult> DeleteFilm(int id)
         {
             await _filmService.DeleteFilmAsync(id);
-            return Ok();
+            return Ok(new { message = "Film deleted" });
         }
 
         [HttpPut("updateFilm"), Authorize(Roles = "Admin")]

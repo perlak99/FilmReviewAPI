@@ -22,7 +22,7 @@ namespace FilmReviewAPI.Controllers
         {
             var userId = int.Parse(User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value);
             await _ratingService.AddRatingAsync(ratingDto, userId);
-            return Ok();
+            return Ok(new { message = "Rating added" });
         }
     }
 }
