@@ -1,4 +1,5 @@
 ﻿using FilmReviewAPI.DTOs.Rating;
+using FilmReviewAPI.Response;
 using FilmReviewAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,7 +23,7 @@ namespace FilmReviewAPI.Controllers
         {
             var userId = int.Parse(User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value);
             await _ratingService.AddRatingAsync(ratingDto, userId);
-            return Ok(new { message = "Rating added" });
+            return Ok(ResponseFactory.CreateSuccessResponse());
         }
     }
 }

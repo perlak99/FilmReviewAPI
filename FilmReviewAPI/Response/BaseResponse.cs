@@ -1,11 +1,11 @@
-﻿namespace FilmReviewAPI.DTOs
+﻿namespace FilmReviewAPI.Response
 {
-    public class ErrorDetails
+    public class BaseResponse
     {
         public int StatusCode { get; set; }
         public string Message { get; set; }
 
-        public ErrorDetails(int statusCode, string message)
+        public BaseResponse(int statusCode, string message)
         {
             StatusCode = statusCode;
             Message = message;

@@ -11,7 +11,7 @@ namespace FilmReviewAPI
         {
             //Film
             CreateMap<AddFilmDto, Film>();
-            CreateMap<Film, FilmListDto>();
+            CreateMap<Film, GetFilmListDto>();
             CreateMap<Film, GetFilmDto>();
 
             //Rating

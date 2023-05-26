@@ -1,6 +1,6 @@
 ﻿namespace FilmReviewAPI.DTOs.Film
 {
-    public class GetFilmsFilterDto
+    public class FilmsFilterDto
     {
         public int? ReleaseYearFrom { get; set; }
         public int? ReleaseYearTo { get; set; }

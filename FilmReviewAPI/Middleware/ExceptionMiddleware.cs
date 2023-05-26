@@ -1,4 +1,4 @@
-﻿using FilmReviewAPI.DTOs;
+﻿using FilmReviewAPI.Response;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json;
 using System.Net;
@@ -32,7 +32,7 @@ namespace FilmReviewAPI.Middleware
 
         private async Task WriteErrorDetailsAsync(HttpContext context, string message, int statusCode, string contentType = "application/json")
         {
-            var error = new ErrorDetails(statusCode, message);
+            var error = ResponseFactory.CreateErrorResponse(statusCode, message);
             context.Response.ContentType = contentType;
             context.Response.StatusCode = statusCode;
             await context.Response.WriteAsync(JsonConvert.SerializeObject(error));
@@ -43,7 +43,7 @@ namespace FilmReviewAPI.Middleware
             context.HandleResponse();
             context.Response.StatusCode = 401;
             context.Response.Headers.Append("content-type", "application/json");
-            await context.Response.WriteAsync(JsonConvert.SerializeObject(new ErrorDetails(401, "You are not authorized! Please log in or register.")));
+            await context.Response.WriteAsync(JsonConvert.SerializeObject(ResponseFactory.CreateErrorResponse(401, "You are not authorized! Please log in or register.")));
         }
     }
 }

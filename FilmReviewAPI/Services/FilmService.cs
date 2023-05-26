@@ -83,11 +83,11 @@ namespace FilmReviewAPI.Services
             await _filmRepository.UpdateAsync(film);
         }
 
-        public async Task<List<FilmListDto>> GetFilmsAsync(GetFilmsFilterDto filter)
+        public async Task<List<GetFilmListDto>> GetFilmsAsync(FilmsFilterDto filter)
         {
             var films = await _filmRepository.GetFilmsAsync(filter);
 
-            return _mapper.Map<List<FilmListDto>>(films);
+            return _mapper.Map<List<GetFilmListDto>>(films);
         }
 
         public async Task<GetFilmDto> GetFilmAsync(int id)

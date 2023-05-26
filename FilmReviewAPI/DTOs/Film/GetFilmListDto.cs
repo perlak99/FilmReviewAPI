@@ -2,7 +2,7 @@
 
 namespace FilmReviewAPI.DTOs.Film
 {
-    public class FilmListDto
+    public class GetFilmListDto
     {
         public int Id { get; set; }
         public string Title { get; set; }
@@ -10,6 +10,6 @@ namespace FilmReviewAPI.DTOs.Film
 
         public Genre Genre { get; set; }
 
-        public Director Director { get; set; }
+        //public Director Director { get; set; }
     }
 }
