@@ -1,4 +1,5 @@
-﻿using FilmReviewAPI.Models;
+﻿using FilmReviewAPI.DTOs.Director;
+using FilmReviewAPI.Models;
 
 namespace FilmReviewAPI.DTOs.Film
 {
@@ -10,6 +11,6 @@ namespace FilmReviewAPI.DTOs.Film
 
         public Genre Genre { get; set; }
 
-        //public Director Director { get; set; }
+        public SimpleDirectorDto Director { get; set; }
     }
 }

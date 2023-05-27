@@ -21,7 +21,7 @@ namespace FilmReviewAPI.Services
             _genreRepository = genreRepository;
         }
 
-        public async Task AddFilmAsync(AddFilmDto request)
+        public async Task AddFilmAsync(AddFilmDto request, int userId)
         {
             var genre = await _genreRepository.GetGenreByIdAsync(request.GenreId);
             if (genre == null)
@@ -39,6 +39,7 @@ namespace FilmReviewAPI.Services
             }
 
             var film = _mapper.Map<Film>(request);
+            film.AddedByUserId = userId;
             await _filmRepository.AddAsync(film);
         }
 

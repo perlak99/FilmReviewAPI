@@ -19,7 +19,7 @@ namespace FilmReviewAPI.Controllers
         }
 
         [HttpPost("addRating"), Authorize()]
-        public async Task<IActionResult> AddRating(AddRatingDto ratingDto)
+        public async Task<ActionResult<BaseResponse>> AddRating(AddRatingDto ratingDto)
         {
             var userId = int.Parse(User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value);
             await _ratingService.AddRatingAsync(ratingDto, userId);

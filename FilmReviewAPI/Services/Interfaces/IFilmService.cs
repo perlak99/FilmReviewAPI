@@ -7,7 +7,7 @@ namespace FilmReviewAPI.Services.Interfaces
     {
         Task<GetFilmDto> GetFilmAsync(int id);
         Task<List<GetFilmListDto>> GetFilmsAsync(FilmsFilterDto filter);
-        Task AddFilmAsync(AddFilmDto request);
+        Task AddFilmAsync(AddFilmDto request, int userId);
         Task DeleteFilmAsync(int id);
         Task UpdateFilmAsync(UpdateFilmDto request);
     }

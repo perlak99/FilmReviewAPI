@@ -18,21 +18,21 @@ namespace FilmReviewAPI.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<IActionResult> AuthenticateAsync(AuthenticateDto request)
+        public async Task<ActionResult<DataResponse<string>>> AuthenticateAsync(AuthenticateDto request)
         {
             var token = await _authService.AuthenticateUserAsync(request.Username, request.Password);
             return Ok(ResponseFactory.CreateSuccessResponse(token));
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync(RegisterDto request)
+        public async Task<ActionResult<BaseResponse>> RegisterAsync(RegisterDto request)
         {
             var user = await _authService.RegisterUserAsync(request.Username, request.Password);
             return Ok(ResponseFactory.CreateSuccessResponse());
         }
 
         [HttpPost("grantRole"), Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GrantRole(int userId, int roleId)
+        public async Task<ActionResult<BaseResponse>> GrantRole(int userId, int roleId)
         {
             await _authService.GrantRole(userId, roleId);
             return Ok(ResponseFactory.CreateSuccessResponse());

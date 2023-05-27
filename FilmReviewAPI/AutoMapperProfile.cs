@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FilmReviewAPI.DTOs.Comment;
 using FilmReviewAPI.DTOs.Film;
 using FilmReviewAPI.DTOs.Rating;
 using FilmReviewAPI.Models;
@@ -11,11 +12,17 @@ namespace FilmReviewAPI
         {
             //Film
             CreateMap<AddFilmDto, Film>();
-            CreateMap<Film, GetFilmListDto>();
-            CreateMap<Film, GetFilmDto>();
+            CreateMap<Film, GetFilmListDto>()
+                 .ForMember(dest => dest.Director, opt => opt.MapFrom(src => src.Director));
+            CreateMap<Film, GetFilmDto>()
+                .ForMember(dest => dest.Director, opt => opt.MapFrom(src => src.Director))
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments));
 
             //Rating
             CreateMap<AddRatingDto, Rating>();
+
+            //Comment
+            CreateMap<Comment, SimpleCommentDto>();
         }
     }
 }
