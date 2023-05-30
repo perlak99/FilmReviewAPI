@@ -93,7 +93,7 @@ namespace FilmReviewAPI.Services
 
         public async Task<GetFilmDto> GetFilmAsync(int id)
         {
-            var film = await _filmRepository.GetFilmByIdWithDetails(id)
+            var film = await _filmRepository.GetFilmByIdWithDetails(id);
 
             if (film == null)
             {
