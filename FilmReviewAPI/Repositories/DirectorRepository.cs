@@ -16,5 +16,13 @@ namespace FilmReviewAPI.Repositories
             return await _dbContext.Directors
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<List<Director>> GetDirectorsBySearchPhrase(string phrase)
+        {
+            return await _dbContext.Directors
+                .Where(x => x.FirstName.Contains(phrase) || x.LastName.Contains(phrase))
+                .Take(5)
+                .ToListAsync();
+        }
     }
 }

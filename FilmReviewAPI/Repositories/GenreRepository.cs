@@ -16,5 +16,13 @@ namespace FilmReviewAPI.Repositories
             return await _dbContext.Genres
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<List<Genre>> GetGenresBySearchPhrase(string phrase)
+        {
+            return await _dbContext.Genres
+                .Where(x => x.Name.Contains(phrase))
+                .Take(5)
+                .ToListAsync();
+        }
     }
 }
