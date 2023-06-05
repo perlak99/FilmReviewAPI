@@ -1,96 +1,20 @@
-using FilmReviewAPI.DAL;
-using FilmReviewAPI.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
-using FilmReviewAPI.Services.Interfaces;
-using FilmReviewAPI.Repositories.Interfaces;
-using FilmReviewAPI.Repositories;
 using FilmReviewAPI.Middleware;
-using Serilog;
+using FilmReviewAPI.Installers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var logger = new LoggerConfiguration()
-    .ReadFrom.Configuration(builder.Configuration)
-    .Enrich.FromLogContext()
-    .CreateLogger();
+// Load and install the installers
+var installers = typeof(Program).Assembly.ExportedTypes
+    .Where(t => typeof(IInstaller).IsAssignableFrom(t) && !t.IsInterface)
+    .Select(Activator.CreateInstance)
+    .Cast<IInstaller>()
+    .ToList();
 
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+// Install components using each installer
+foreach (var installer in installers)
 {
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
-    {
-        Description = "Please enter JWT Bearer token",
-        In = ParameterLocation.Header,
-        Name = "Authorization",
-        Scheme = JwtBearerDefaults.AuthenticationScheme,
-        Type = SecuritySchemeType.Http
-    });
-
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
-});
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
-
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IFilmService, FilmService>();
-builder.Services.AddScoped<IRatingService, RatingService>();
-builder.Services.AddScoped<IDirectorService, DirectorService>();
-builder.Services.AddScoped<IGenreService, GenreService>();
-builder.Services.AddScoped<ICommentService, CommentService>();
-
-builder.Services.AddScoped<IRatingRepository, RatingRepository>();
-builder.Services.AddScoped<IFilmRepository, FilmRepository>();
-builder.Services.AddScoped<IDirectorRepository, DirectorRepository>();
-builder.Services.AddScoped<IGenreRepository, GenreRepository>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IRoleRepository, RoleRepository>();
-builder.Services.AddScoped<ICommentRepository, CommentRepository>();
-
-builder.Services.AddDbContext<FilmReviewDbContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-);
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options => {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        };
-        options.Events = new JwtBearerEvents
-        {
-            OnChallenge = async context =>
-            {
-                await ExceptionMiddleware.WriteUnauthorizedErrorDetailsAsync(context);
-            }
-        };
-    });
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("DevCorsPolicy", builder =>
-    {
-        builder.AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader();
-    });
-});
+    installer.Install(builder);
+}
 
 var app = builder.Build();
 
