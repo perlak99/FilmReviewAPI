@@ -16,10 +16,10 @@ namespace FilmReviewAPI.Controllers
             _genreService = genreService;
         }
 
-        [HttpGet("getGenresBySearchPhrase")]
-        public async Task<ActionResult<DataResponse<List<Genre>>>> GetGenresBySearchPhrase(string phrase)
+        [HttpGet("getGenres")]
+        public async Task<ActionResult<DataResponse<List<Genre>>>> GetGenres()
         {
-            var genres = await _genreService.GetGenresBySearchPhrase(phrase);
+            var genres = await _genreService.GetGenres();
             return Ok(ResponseFactory.CreateSuccessResponse(genres));
         }
     }

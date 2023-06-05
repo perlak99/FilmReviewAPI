@@ -16,9 +16,9 @@ namespace FilmReviewAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<List<SimpleDirectorDto>> GetDirectorsBySearchPhrase(string phrase)
+        public async Task<List<SimpleDirectorDto>> GetDirectors()
         {
-            var directors = await _directorRepository.GetDirectorsBySearchPhrase(phrase);
+            var directors = await _directorRepository.GetDirectors();
 
             return _mapper.Map<List<SimpleDirectorDto>>(directors);
         }

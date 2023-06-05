@@ -6,6 +6,6 @@ namespace FilmReviewAPI.Repositories.Interfaces
     {
         public Task<Director> GetDirectorByIdAsync(int id);
 
-        public Task<List<Director>> GetDirectorsBySearchPhrase(string phrase);
+        public Task<List<Director>> GetDirectors();
     }
 }

@@ -16,9 +16,9 @@ namespace FilmReviewAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<List<Genre>> GetGenresBySearchPhrase(string phrase)
+        public async Task<List<Genre>> GetGenres()
         {
-            var genres = await _genreRepository.GetGenresBySearchPhrase(phrase);
+            var genres = await _genreRepository.GetGenres();
 
             return genres;
         }

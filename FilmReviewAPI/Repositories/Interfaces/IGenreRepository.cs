@@ -5,6 +5,6 @@ namespace FilmReviewAPI.Repositories.Interfaces
     public interface IGenreRepository : IBaseRepository<Genre>
     {
         public Task<Genre> GetGenreByIdAsync(int id);
-        public Task<List<Genre>> GetGenresBySearchPhrase(string phrase);
+        public Task<List<Genre>> GetGenres();
     }
 }

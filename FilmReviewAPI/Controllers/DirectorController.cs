@@ -16,10 +16,10 @@ namespace FilmReviewAPI.Controllers
             _directorService = directorService;
         }
 
-        [HttpGet("getDirectorsBySearchPhrase")]
-        public async Task<ActionResult<DataResponse<List<SimpleDirectorDto>>>> GetDirectorsBySearchPhrase(string phrase)
+        [HttpGet("getDirectors")]
+        public async Task<ActionResult<DataResponse<List<SimpleDirectorDto>>>> GetDirectors()
         {
-            var directors = await _directorService.GetDirectorsBySearchPhrase(phrase);
+            var directors = await _directorService.GetDirectors();
             return Ok(ResponseFactory.CreateSuccessResponse(directors));
         }
     }

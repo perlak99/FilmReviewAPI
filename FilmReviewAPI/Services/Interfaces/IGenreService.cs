@@ -4,6 +4,6 @@ namespace FilmReviewAPI.Services.Interfaces
 {
     public interface IGenreService
     {
-        public Task<List<Genre>> GetGenresBySearchPhrase(string phrase);
+        public Task<List<Genre>> GetGenres();
     }
 }
