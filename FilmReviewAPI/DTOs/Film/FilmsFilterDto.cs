@@ -2,7 +2,7 @@
 {
     public class FilmsFilterDto
     {
-        public string SearchPhrase { get; set; } = "";
+        public string? SearchPhrase { get; set; }
         public int? ReleaseYearFrom { get; set; }
         public int? ReleaseYearTo { get; set; }
         public int? DirectorId { get; set; }
