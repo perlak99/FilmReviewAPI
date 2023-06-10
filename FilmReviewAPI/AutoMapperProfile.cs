@@ -23,6 +23,7 @@ namespace FilmReviewAPI
 
             //Comment
             CreateMap<Comment, SimpleCommentDto>();
+            CreateMap<AddCommentDto, Comment>();
         }
     }
 }

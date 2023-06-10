@@ -2,7 +2,7 @@
 
 namespace FilmReviewAPI.Repositories.Interfaces
 {
-    public interface ICommentRepository
+    public interface ICommentRepository : IBaseRepository<Comment>
     {
         Task<Comment> GetCommentByIdAsync(int id);
     }

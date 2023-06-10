@@ -29,7 +29,25 @@ namespace FilmReviewAPI.DAL
                .IsRequired()
                .OnDelete(DeleteBehavior.Restrict);
 
-            // GENERATING DATA
+            modelBuilder.Entity<Comment>()
+              .HasOne(c => c.ParentComment)
+              .WithMany(c => c.Replies)
+              .HasForeignKey(c => c.ParentCommentId)
+              .OnDelete(DeleteBehavior.Restrict);
+
+            SeedData(modelBuilder);
+        }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Film> Films { get; set; }
+        public DbSet<Director> Directors { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+
+        private void SeedData(ModelBuilder modelBuilder)
+        {
             // ROLES
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Admin" }
@@ -39,7 +57,8 @@ namespace FilmReviewAPI.DAL
             PasswordHashUtils.CreatePasswordHash("admin", out var passwordHash, out var passwordSalt);
 
             modelBuilder.Entity<User>().HasData(
-                new User { 
+                new User
+                {
                     Id = 1,
                     Username = "admin",
                     PasswordHash = passwordHash,
@@ -87,14 +106,6 @@ namespace FilmReviewAPI.DAL
                 }
             );
         }
-
-        public DbSet<User> Users { get; set; }
-        public DbSet<Genre> Genres { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Film> Films { get; set; }
-        public DbSet<Director> Directors { get; set; }
-        public DbSet<Role> Roles { get; set; }
-        public DbSet<Rating> Ratings { get; set; }
     }
 
 }
