@@ -1,6 +1,6 @@
 ﻿namespace FilmReviewAPI.Models
 {
-    public class Director
+    public class Director : IModel
     {
         public int Id { get; set; }
         public string FirstName { get; set; }

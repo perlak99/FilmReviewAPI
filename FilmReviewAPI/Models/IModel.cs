@@ -1,4 +1,4 @@
-﻿namespace FilmReviewAPI.Repositories.Interfaces
+﻿namespace FilmReviewAPI.Models
 {
     public interface IModel
     {

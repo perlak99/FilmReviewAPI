@@ -1,4 +1,5 @@
 ﻿using FilmReviewAPI.DAL;
+using FilmReviewAPI.Models;
 using FilmReviewAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

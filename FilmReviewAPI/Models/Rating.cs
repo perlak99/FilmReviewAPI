@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FilmReviewAPI.Models
 {
-    public class Rating
+    public class Rating : IModel
     {
         public int Id { get; set; }
         [Range(1,10)]
