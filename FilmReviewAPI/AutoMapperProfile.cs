@@ -17,6 +17,7 @@ namespace FilmReviewAPI
             CreateMap<Film, GetFilmDto>()
                 .ForMember(dest => dest.Director, opt => opt.MapFrom(src => src.Director))
                 .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments));
+            CreateMap<UpdateFilmDto, Film>();
 
             //Rating
             CreateMap<AddRatingDto, Rating>();

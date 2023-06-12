@@ -1,9 +1,10 @@
 ﻿using FilmReviewAPI.DAL;
 using FilmReviewAPI.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace FilmReviewAPI.Repositories
 {
-    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
+    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, IModel
     {
         protected readonly FilmReviewDbContext _dbContext;
 
@@ -28,6 +29,16 @@ namespace FilmReviewAPI.Repositories
         {
             _dbContext.Set<T>().Remove(entity);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async virtual Task<T> GetByIdNonTrackedAsync(int id)
+        {
+            return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+        }
+
+        public async virtual Task<T> GetByIdAsync(int id)
+        {
+            return await _dbContext.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
         }
     }
 }

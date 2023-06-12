@@ -19,10 +19,10 @@ namespace FilmReviewAPI.Controllers
         }
 
         [HttpPost("addComment"), Authorize()]
-        public async Task<ActionResult<BaseResponse>> AddComment(AddCommentDto commentDto)
+        public async Task<ActionResult<BaseResponse>> AddComment(AddCommentDto request)
         {
             var userId = int.Parse(User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value);
-            await _commentService.AddCommentAsync(commentDto, userId);
+            await _commentService.AddCommentAsync(request, userId);
             return Ok(ResponseFactory.CreateSuccessResponse());
         }
     }
