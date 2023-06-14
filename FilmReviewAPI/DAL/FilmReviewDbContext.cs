@@ -103,6 +103,15 @@ namespace FilmReviewAPI.DAL
                     GenreId = 1,
                     ReleaseYear = 2012,
                     AddedByUserId = 1
+                },
+                new Film
+                {
+                    Id = 5,
+                    Title = "test",
+                    DirectorId = null,
+                    GenreId = 2,
+                    ReleaseYear = 0,
+                    AddedByUserId = 1
                 }
             );
         }
