@@ -2,7 +2,7 @@
 
 namespace FilmReviewAPI.Models
 {
-    public class Comment : IModel
+    public class Comment : IEntity
     {
         public int Id { get; set; }
         public string Title { get; set; }

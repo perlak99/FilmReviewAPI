@@ -11,12 +11,6 @@ namespace FilmReviewAPI.Repositories
         {
         }
 
-        public async Task<Role> GetRoleByIdAsync(int id)
-        {
-            return await _dbContext.Roles
-                .FirstOrDefaultAsync(x => x.Id == id);
-        }
-
         public async Task<Role> GetRoleByNameAsync(string name)
         {
             return await _dbContext.Roles

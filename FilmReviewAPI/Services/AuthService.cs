@@ -60,7 +60,7 @@ namespace FilmReviewAPI.Services
 
         public async Task<User> RegisterUserAsync(string username, string password)
         {
-            if (await _userRepository.GetUserWithRolesByUsernameAsync(username) != null)
+            if (!await _userRepository.CheckIfExistsByUsername(username))
             {
                 throw new ArgumentException("Username is already taken");
             }
@@ -94,13 +94,13 @@ namespace FilmReviewAPI.Services
                 throw new ArgumentException("Username doesn't exist");
             }
 
-            var role = await _roleRepository.GetRoleByIdAsync(roleId);
+            var role = await _roleRepository.GetByIdAsync(roleId);
             if (role == null)
             {
                 throw new ArgumentException("Role doesn't exist");
             }
 
-            if (user.Roles.FirstOrDefault(x => x.Id == roleId) != null)
+            if (user.Roles.Any(x => x.Id == roleId))
             {
                 throw new ArgumentException("Role already granted");
             }

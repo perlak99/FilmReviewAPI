@@ -17,10 +17,9 @@ namespace FilmReviewAPI.Repositories
                 .FirstOrDefaultAsync(x => x.Username == username);
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<bool> CheckIfExistsByUsername(string username)
         {
-            return await _dbContext.Users
-                .FirstOrDefaultAsync(x => x.Id == id);
+            return await _dbContext.Users.AnyAsync(x => x.Username == username);
         }
 
         public async Task<User> GetUserWithRolesByUsernameAsync(string username)

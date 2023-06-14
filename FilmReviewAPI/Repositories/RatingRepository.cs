@@ -12,9 +12,9 @@ namespace FilmReviewAPI.Repositories
         {
         }
 
-        public async Task<Rating> GetRatingByUserAndFilmAsync(int filmId, int userId)
+        public async Task<bool> CheckIfRatingByUserAndFilmExistsAsync(int filmId, int userId)
         {
-           return await _dbContext.Ratings.FirstOrDefaultAsync(x => x.FilmId == filmId && x.UserId == userId);
+            return await _dbContext.Ratings.AnyAsync(x => x.FilmId == filmId && x.UserId == userId);
         }
     }
 }

@@ -2,10 +2,11 @@
 using FilmReviewAPI.Models;
 using FilmReviewAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace FilmReviewAPI.Repositories
 {
-    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, IModel
+    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class, IEntity
     {
         protected readonly FilmReviewDbContext _dbContext;
 
@@ -32,14 +33,14 @@ namespace FilmReviewAPI.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async virtual Task<T> GetByIdNonTrackedAsync(int id)
+        public async virtual Task<bool> CheckIfExistsById(int id)
         {
-            return await _dbContext.Set<T>().AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            return await _dbContext.Set<T>().AnyAsync(x => x.Id == id);
         }
 
         public async virtual Task<T> GetByIdAsync(int id)
         {
-            return await _dbContext.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
+            return await _dbContext.Set<T>().FindAsync(id);
         }
     }
 }

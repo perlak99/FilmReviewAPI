@@ -23,16 +23,14 @@ namespace FilmReviewAPI.Services
 
         public async Task AddFilmAsync(AddFilmDto request, int userId)
         {
-            var genre = await _genreRepository.GetGenreByIdAsync(request.GenreId);
-            if (genre == null)
+            if (await _genreRepository.CheckIfExistsById((int)request.GenreId))
             {
                 throw new ArgumentException("Genre not found");
             }
 
             if (request.DirectorId != null)
             {
-                var director = await _directorRepository.GetDirectorByIdAsync((int)request.DirectorId);
-                if (director == null)
+                if (await _directorRepository.CheckIfExistsById((int)request.DirectorId))
                 {
                     throw new ArgumentException("Director not found");
                 }
@@ -45,7 +43,7 @@ namespace FilmReviewAPI.Services
 
         public async Task DeleteFilmAsync(int id)
         {
-            var film = await _filmRepository.GetFilmByIdAsync(id);
+            var film = await _filmRepository.GetByIdAsync(id);
 
             if (film == null)
             {
@@ -57,29 +55,25 @@ namespace FilmReviewAPI.Services
 
         public async Task UpdateFilmAsync(UpdateFilmDto request)
         {
-            var film = await _filmRepository.GetFilmByIdAsync(request.Id);
-
-            if (film == null)
+            if (!await _filmRepository.CheckIfExistsById(request.Id))
             {
                 throw new ArgumentException("Film not found");
             }
 
-            var genre = await _genreRepository.GetGenreByIdAsync(request.GenreId);
-            if (genre == null)
+            if (!await _genreRepository.CheckIfExistsById(request.GenreId))
             {
                 throw new ArgumentException("Genre not found");
             }
 
             if (request.DirectorId != null)
             {
-                var director = await _directorRepository.GetDirectorByIdAsync((int)request.DirectorId);
-                if (director == null)
+                if (!await _directorRepository.CheckIfExistsById((int)request.DirectorId))
                 {
                     throw new ArgumentException("Director not found");
                 }
             }
 
-            film = _mapper.Map<Film>(request);
+            var film = _mapper.Map<Film>(request);
 
             await _filmRepository.UpdateAsync(film);
         }

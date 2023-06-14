@@ -23,21 +23,17 @@ namespace FilmReviewAPI.Services
 
         public async Task AddRatingAsync(AddRatingDto request, int userId)
         {
-            var user = await _userRepository.GetUserByIdAsync(userId);
-
-            if (user == null)
+            if (!await _userRepository.CheckIfExistsById(userId))
             {
                 throw new ArgumentException("User not found");
             }
 
-            var film = await _filmRepository.GetFilmByIdAsync(request.FilmId);
-
-            if (film == null)
+            if (!await _filmRepository.CheckIfExistsById(request.FilmId))
             {
                 throw new ArgumentException("Film not found");
             }
 
-            if (await _ratingRepository.GetRatingByUserAndFilmAsync(request.FilmId, userId) != null)
+            if (await _ratingRepository.CheckIfRatingByUserAndFilmExistsAsync(request.FilmId, userId))
             {
                 throw new ArgumentException("Film is already rated by this user");
             }

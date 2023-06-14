@@ -24,9 +24,8 @@ namespace FilmReviewAPI.Services
         public async Task AddCommentAsync(AddCommentDto request, int userId)
         {
             if (request.FilmId != null)
-            {
-                var film = await _filmRepository.GetFilmByIdAsync((int)request.FilmId);
-                if (film == null)
+            { 
+                if (!await _filmRepository.CheckIfExistsById((int)request.FilmId))
                 {
                     throw new ArgumentException("Film not found");
                 }
@@ -34,8 +33,7 @@ namespace FilmReviewAPI.Services
 
             if (request.DirectorId != null)
             {
-                var director = await _directorRepository.GetDirectorByIdAsync((int)request.DirectorId);
-                if (director == null)
+                if (!await _directorRepository.CheckIfExistsById((int)request.DirectorId))
                 {
                     throw new ArgumentException("Director not found");
                 }
@@ -43,8 +41,7 @@ namespace FilmReviewAPI.Services
 
             if (request.ParentCommentId != null)
             {
-                var parentComment = await _commentRepository.GetCommentByIdAsync((int)request.ParentCommentId);
-                if (parentComment == null)
+                if (!await _commentRepository.CheckIfExistsById((int)request.ParentCommentId))
                 {
                     throw new ArgumentException("Parent comment not found");
                 }

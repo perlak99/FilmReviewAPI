@@ -13,11 +13,6 @@ namespace FilmReviewAPI.Repositories
         {
         }
 
-        public async Task<Film> GetFilmByIdAsync(int id)
-        {
-            return await _dbContext.Films.FirstOrDefaultAsync(x => x.Id == id);
-        }
-
         public async Task<List<Film>> GetFilmsAsync(FilmsFilterDto filter)
         {
             var query = _dbContext.Films

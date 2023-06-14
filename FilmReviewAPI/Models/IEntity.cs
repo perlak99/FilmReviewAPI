@@ -1,6 +1,6 @@
 ﻿namespace FilmReviewAPI.Models
 {
-    public interface IModel
+    public interface IEntity
     {
         int Id { get; set; }
     }

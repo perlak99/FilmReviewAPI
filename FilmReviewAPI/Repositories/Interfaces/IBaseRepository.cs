@@ -8,8 +8,9 @@
 
         public Task RemoveAsync(T entity);
 
-        public Task<T> GetByIdNonTrackedAsync(int id);
+        public Task<bool> CheckIfExistsById(int id);
 
         public Task<T> GetByIdAsync(int id);
+ 
     }
 }

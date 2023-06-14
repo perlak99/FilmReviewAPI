@@ -10,11 +10,5 @@ namespace FilmReviewAPI.Repositories
         public CommentRepository(FilmReviewDbContext dbContext) : base(dbContext)
         {
         }
-
-        public async Task<Comment> GetCommentByIdAsync(int id)
-        {
-            return await _dbContext.Comments
-                .FirstOrDefaultAsync(x => x.Id == id);
-        }
     }
 }
