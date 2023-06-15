@@ -22,4 +22,6 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
       - name: Test
-        run: dotnet test --connection-string "${{ secrets.TEST_DATABASE_CONNECTION_STRING }}"
+        env:
+          TEST_DATABASE_CONNECTION_STRING: ${{ secrets.TEST_DATABASE_CONNECTION_STRING }}
+        run: dotnet test
