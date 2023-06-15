@@ -1,5 +1,8 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.AspNetCore.TestHost;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FilmReviewAPI.Tests.IntegrationTests.Controllers
 {
@@ -9,7 +12,23 @@ namespace FilmReviewAPI.Tests.IntegrationTests.Controllers
 
         public FilmControllerTests(WebApplicationFactory<Program> factory)
         {
-            _factory = factory;
+            _factory = factory.WithWebHostBuilder(builder =>
+            {
+                builder.ConfigureTestServices(services =>
+                {
+                    // Retrieve the connection string from the environment variable
+                    var connectionString = Environment.GetEnvironmentVariable("TEST_DATABASE_CONNECTION_STRING");
+
+                    // Remove dbContext
+                    services.Remove(services.SingleOrDefault( d => d.ServiceType == typeof(DbContextOptions<FilmReviewDbContext>)));
+
+                    // Replace the database context configuration with the test database connection string
+                    services.AddDbContext<FilmReviewDbContext>(options =>
+                    {
+                        options.UseSqlServer(connectionString);
+                    });
+                });
+            });
         }
 
         [Fact]
