@@ -106,7 +106,7 @@ namespace FilmReviewAPI.DAL
                 },
                 new Film
                 {
-                    Id = 5,
+                    Id = 2,
                     Title = "test",
                     DirectorId = null,
                     GenreId = 2,

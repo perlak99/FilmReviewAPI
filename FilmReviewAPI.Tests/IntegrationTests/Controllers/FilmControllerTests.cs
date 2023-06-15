@@ -37,7 +37,7 @@ namespace FilmReviewAPI.Tests.IntegrationTests.Controllers
             // Arrange
             var client = _factory.CreateClient();
             client.BaseAddress = new Uri("https://localhost:7130");
-            int filmId = 5;
+            int filmId = 1;
 
             // Act
             var response = await client.GetAsync($"/api/Film/getFilm?id={filmId}");
