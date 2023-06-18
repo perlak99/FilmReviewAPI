@@ -42,6 +42,7 @@ namespace FilmReviewAPI.DAL
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Film> Films { get; set; }
+        public DbSet<FilmStatus> FilmStatuses { get; set; }
         public DbSet<Director> Directors { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Rating> Ratings { get; set; }
@@ -51,6 +52,13 @@ namespace FilmReviewAPI.DAL
             // ROLES
             modelBuilder.Entity<Role>().HasData(
                 new Role { Id = 1, Name = "Admin" }
+            );
+
+            // FILM STATUSES
+            modelBuilder.Entity<FilmStatus>().HasData(
+                new FilmStatus { Id = 1, Name = "Accepted" },
+                new FilmStatus { Id = 2, Name = "Rejected" },
+                new FilmStatus { Id = 3, Name = "Pending" }
             );
 
             // USERS
@@ -102,7 +110,8 @@ namespace FilmReviewAPI.DAL
                     DirectorId = null,
                     GenreId = 1,
                     ReleaseYear = 2012,
-                    AddedByUserId = 1
+                    AddedByUserId = 1,
+                    FilmStatusId = 1
                 },
                 new Film
                 {
@@ -111,7 +120,8 @@ namespace FilmReviewAPI.DAL
                     DirectorId = null,
                     GenreId = 2,
                     ReleaseYear = 0,
-                    AddedByUserId = 1
+                    AddedByUserId = 1,
+                    FilmStatusId = 3
                 }
             );
         }

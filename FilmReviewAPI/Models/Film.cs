@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using FilmReviewAPI.Enums;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FilmReviewAPI.Models
 {
@@ -14,6 +15,15 @@ namespace FilmReviewAPI.Models
         public ICollection<Rating> Ratings { get; set; }
 
         public ICollection<User> FavouriteUsers { get; set; }
+
+        [NotMapped]
+        public FilmStatusEnum Status
+        {
+            get => (FilmStatusEnum)FilmStatusId;
+            set => FilmStatusId = (int)value;
+        }
+
+        public int FilmStatusId { get; set; }
 
         [ForeignKey("AddedByUserId")]
         public User AddedByUser { get; set; }
