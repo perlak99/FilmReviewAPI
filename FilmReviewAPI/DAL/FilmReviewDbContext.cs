@@ -111,7 +111,7 @@ namespace FilmReviewAPI.DAL
                     GenreId = 1,
                     ReleaseYear = 2012,
                     AddedByUserId = 1,
-                    FilmStatusId = 1
+                    Status = Enums.FilmStatusEnum.Accepted
                 },
                 new Film
                 {
@@ -121,7 +121,7 @@ namespace FilmReviewAPI.DAL
                     GenreId = 2,
                     ReleaseYear = 0,
                     AddedByUserId = 1,
-                    FilmStatusId = 3
+                    Status = Enums.FilmStatusEnum.Pending
                 }
             );
         }

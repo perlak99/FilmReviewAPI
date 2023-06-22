@@ -23,7 +23,7 @@ namespace FilmReviewAPI.Models
             set => FilmStatusId = (int)value;
         }
 
-        public int FilmStatusId { get; set; }
+        private int FilmStatusId { get; set; }
 
         [ForeignKey("AddedByUserId")]
         public User AddedByUser { get; set; }

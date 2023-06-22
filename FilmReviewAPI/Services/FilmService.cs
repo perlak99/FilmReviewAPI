@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FilmReviewAPI.DTOs.Film;
+using FilmReviewAPI.Enums;
 using FilmReviewAPI.Models;
 using FilmReviewAPI.Repositories.Interfaces;
 using FilmReviewAPI.Services.Interfaces;
@@ -38,6 +39,7 @@ namespace FilmReviewAPI.Services
 
             var film = _mapper.Map<Film>(request);
             film.AddedByUserId = userId;
+            film.Status = FilmStatusEnum.Pending;
             await _filmRepository.AddAsync(film);
         }
 
