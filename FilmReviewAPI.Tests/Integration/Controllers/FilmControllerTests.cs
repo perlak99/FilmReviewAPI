@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace FilmReviewAPI.Tests.IntegrationTests.Controllers
+namespace FilmReviewAPI.Tests.Integration.Controllers
 {
     public class FilmControllerTests : BaseControllerTests
     {

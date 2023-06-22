@@ -3,6 +3,7 @@ using FilmReviewAPI.Response;
 using FilmReviewAPI.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using System.Security.Claims;
 
 namespace FilmReviewAPI.Controllers
@@ -11,11 +12,13 @@ namespace FilmReviewAPI.Controllers
     [ApiController]
     public class FilmController : ControllerBase
     {
-        readonly IFilmService _filmService;
+        private readonly IFilmService _filmService;
+        private readonly IMemoryCache _memoryCache;
 
-        public FilmController(IFilmService filmService)
+        public FilmController(IFilmService filmService, IMemoryCache memoryCache)
         {
             _filmService = filmService;
+            _memoryCache = memoryCache;
         }
 
         [HttpPost("addFilm"), Authorize(Roles = "Admin")]
@@ -29,7 +32,22 @@ namespace FilmReviewAPI.Controllers
         [HttpGet("getFilm")]
         public async Task<ActionResult<DataResponse<GetFilmDto>>> GetFilm(int id)
         {
+            var cacheKey = $"GetFilm_{id}";
+
+            if (_memoryCache.TryGetValue(cacheKey, out GetFilmDto cachedFilm))
+            {
+                return Ok(ResponseFactory.CreateSuccessResponse(cachedFilm));
+            }
+
             var film = await _filmService.GetFilmAsync(id);
+
+            var cacheOptions = new MemoryCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(10)
+            };
+
+            _memoryCache.Set(cacheKey, film, cacheOptions);
+
             return Ok(ResponseFactory.CreateSuccessResponse(film));
         }
 

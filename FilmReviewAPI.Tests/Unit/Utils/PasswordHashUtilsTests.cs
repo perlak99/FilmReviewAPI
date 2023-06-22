@@ -1,6 +1,6 @@
 ﻿using FilmReviewAPI.Utils;
 
-namespace FilmReviewAPI.Tests.UnitTests.Utils
+namespace FilmReviewAPI.Tests.Unit.Utils
 {
     public class PasswordHashUtilsTests
     {

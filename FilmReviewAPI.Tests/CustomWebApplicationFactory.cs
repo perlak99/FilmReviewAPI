@@ -23,7 +23,11 @@ namespace FilmReviewAPI.Tests
                 var connectionString = Environment.GetEnvironmentVariable("TEST_DATABASE_CONNECTION_STRING") ?? configuration.GetConnectionString("DefaultConnection");
 
                 // Remove dbContext
-                services.Remove(services.SingleOrDefault(d => d.ServiceType == typeof(DbContextOptions<FilmReviewDbContext>)));
+                var dbContext = services.FirstOrDefault(d => d.ServiceType == typeof(DbContextOptions<FilmReviewDbContext>));
+                if (dbContext != null)
+                {
+                    services.Remove(dbContext);
+                }
 
                 // Replace the database context configuration with the test database connection string
                 services.AddDbContext<FilmReviewDbContext>(options =>

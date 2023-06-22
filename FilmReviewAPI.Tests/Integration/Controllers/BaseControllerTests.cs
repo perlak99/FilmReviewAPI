@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-namespace FilmReviewAPI.Tests.IntegrationTests.Controllers
+
+namespace FilmReviewAPI.Tests.Integration.Controllers
 {
     public abstract class BaseControllerTests : IClassFixture<CustomWebApplicationFactory>
     {
