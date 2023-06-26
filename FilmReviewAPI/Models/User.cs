@@ -1,4 +1,6 @@
-﻿namespace FilmReviewAPI.Models
+﻿using FilmReviewAPI.Models.Interfaces;
+
+namespace FilmReviewAPI.Models
 {
     public class User : IEntity
     {

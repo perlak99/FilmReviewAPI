@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using FilmReviewAPI.Models.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FilmReviewAPI.Models
 {

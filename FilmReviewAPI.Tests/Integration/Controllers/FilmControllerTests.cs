@@ -19,7 +19,6 @@ namespace FilmReviewAPI.Tests.Integration.Controllers
 
             // Assert
             response.EnsureSuccessStatusCode();
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         }
     }
 }

@@ -39,8 +39,26 @@ namespace FilmReviewAPI.Services
 
             var film = _mapper.Map<Film>(request);
             film.AddedByUserId = userId;
-            film.Status = FilmStatusEnum.Pending;
+            film.Status = StatusEnum.Pending;
             await _filmRepository.AddAsync(film);
+        }
+
+        public async Task ChangeFilmStatus(int filmId, int statusId)
+        {
+            if (!Enum.IsDefined(typeof(StatusEnum), statusId))
+            {
+                throw new ArgumentException("Invalid status");
+            }
+
+            var film = await _filmRepository.GetByIdAsync(filmId);
+            if (film == null)
+            {
+                throw new ArgumentException("Film not found");
+            }
+
+            film.Status = (StatusEnum)statusId;
+
+            await _filmRepository.UpdateAsync(film);
         }
 
         public async Task DeleteFilmAsync(int id)

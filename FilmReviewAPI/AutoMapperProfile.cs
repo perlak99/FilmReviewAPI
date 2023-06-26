@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FilmReviewAPI.DTOs.Comment;
+using FilmReviewAPI.DTOs.Director;
 using FilmReviewAPI.DTOs.Film;
 using FilmReviewAPI.DTOs.Rating;
 using FilmReviewAPI.Models;
@@ -25,6 +26,9 @@ namespace FilmReviewAPI
             //Comment
             CreateMap<Comment, SimpleCommentDto>();
             CreateMap<AddCommentDto, Comment>();
+
+            //Director
+            CreateMap<AddDirectorDto, Director>();
         }
     }
 }

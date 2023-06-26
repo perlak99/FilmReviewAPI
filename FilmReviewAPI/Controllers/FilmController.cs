@@ -71,5 +71,12 @@ namespace FilmReviewAPI.Controllers
             await _filmService.UpdateFilmAsync(request);
             return Ok(ResponseFactory.CreateSuccessResponse());
         }
+
+        [HttpPut("changeFilmStatus"), Authorize(Roles = "Admin")]
+        public async Task<ActionResult<BaseResponse>> ChangeFilmStatus(int filmId, int statusId)
+        {
+            await _filmService.ChangeFilmStatus(filmId, statusId);
+            return Ok(ResponseFactory.CreateSuccessResponse());
+        }
     }
 }

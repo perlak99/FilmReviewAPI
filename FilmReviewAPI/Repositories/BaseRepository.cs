@@ -1,8 +1,7 @@
 ﻿using FilmReviewAPI.DAL;
-using FilmReviewAPI.Models;
+using FilmReviewAPI.Models.Interfaces;
 using FilmReviewAPI.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace FilmReviewAPI.Repositories
 {

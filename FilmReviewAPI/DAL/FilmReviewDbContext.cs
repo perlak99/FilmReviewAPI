@@ -1,4 +1,5 @@
-﻿using FilmReviewAPI.Models;
+﻿using FilmReviewAPI.Enums;
+using FilmReviewAPI.Models;
 using FilmReviewAPI.Utils;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,7 +43,7 @@ namespace FilmReviewAPI.DAL
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Film> Films { get; set; }
-        public DbSet<FilmStatus> FilmStatuses { get; set; }
+        public DbSet<Status> Statuses { get; set; }
         public DbSet<Director> Directors { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Rating> Ratings { get; set; }
@@ -55,10 +56,10 @@ namespace FilmReviewAPI.DAL
             );
 
             // FILM STATUSES
-            modelBuilder.Entity<FilmStatus>().HasData(
-                new FilmStatus { Id = 1, Name = "Accepted" },
-                new FilmStatus { Id = 2, Name = "Rejected" },
-                new FilmStatus { Id = 3, Name = "Pending" }
+            modelBuilder.Entity<Status>().HasData(
+                new Status { Id = 1, Name = "Accepted" },
+                new Status { Id = 2, Name = "Rejected" },
+                new Status { Id = 3, Name = "Pending" }
             );
 
             // USERS
@@ -111,7 +112,7 @@ namespace FilmReviewAPI.DAL
                     GenreId = 1,
                     ReleaseYear = 2012,
                     AddedByUserId = 1,
-                    Status = Enums.FilmStatusEnum.Accepted
+                    Status = StatusEnum.Accepted
                 },
                 new Film
                 {
@@ -121,7 +122,7 @@ namespace FilmReviewAPI.DAL
                     GenreId = 2,
                     ReleaseYear = 0,
                     AddedByUserId = 1,
-                    Status = Enums.FilmStatusEnum.Pending
+                    Status = StatusEnum.Pending
                 }
             );
         }

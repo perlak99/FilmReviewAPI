@@ -10,5 +10,7 @@ namespace FilmReviewAPI.Services.Interfaces
         Task AddFilmAsync(AddFilmDto request, int userId);
         Task DeleteFilmAsync(int id);
         Task UpdateFilmAsync(UpdateFilmDto request);
+
+        Task ChangeFilmStatus(int filmId, int statusId);
     }
 }

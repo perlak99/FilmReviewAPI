@@ -1,6 +1,6 @@
 ﻿namespace FilmReviewAPI.Enums
 {
-    public enum FilmStatusEnum
+    public enum StatusEnum
     {
         Accepted = 1,
         Rejected,

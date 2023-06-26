@@ -1,4 +1,4 @@
-﻿namespace FilmReviewAPI.Models
+﻿namespace FilmReviewAPI.Models.Interfaces
 {
     public interface IEntity
     {
