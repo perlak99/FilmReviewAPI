@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches:
@@ -11,34 +12,45 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3.2.0
         with:
           dotnet-version: 6.0.x
+
       - name: Restore dependencies
         run: dotnet restore
+
       - name: Build
         run: dotnet build --no-restore
-      - name: Start Database Container
-        env:
-          DOCKER_HUB_USERNAME: perlak99
-          IMAGE_NAME: film-review-api
-          IMAGE_TAG: v1.0
-          CONTAINER_NAME: filmreviewtestdb
-          DATABASE_NAME: filmReviewTestDb
+
+      - name: Set up Docker
+        uses: docker/setup-docker@v1
+
+      - name: Pull Film Review API SQL Server image
+        run: docker pull perlak99/film-review-api:v1.0
+
+      - name: Start Film Review API SQL Server container
         run: |
-          docker pull $DOCKER_HUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG
-          docker run -d -p 1433:1433 --name $CONTAINER_NAME $DOCKER_HUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG
-          sleep 10  # Give some time for the container to start
-          docker ps -a  # Print container details for debugging
+          docker run -e 'ACCEPT_EULA=Y' \
+                     -e 'SA_PASSWORD=admin' \
+                     -p 1433:1433 \
+                     -d perlak99/film-review-api:v1.0
+
+      - name: Wait for SQL Server to start
+        run: |
+          timeout 15 bash -c "until echo > /dev/tcp/localhost/1433; do sleep 5; done"
+
       - name: Test
         env:
-          TEST_DATABASE_CONNECTION_STRING: 'Server=localhost,1433;Database=filmReviewTestDb;User Id=sa;Password=admin;'
-        run: |
-          dotnet test --configuration Release --logger "trx;LogFileName=testresults.trx" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/Coverage/
-      - name: Stop and Remove Database Container
-        run: |
-          docker stop $CONTAINER_NAME
-          docker rm $CONTAINER_NAME
+          TEST_DATABASE_CONNECTION_STRING: Server=localhost,1433;Database=your_database_name;User Id=sa;Password=admin;
+        run: dotnet test
+
+      - name: Stop Film Review API SQL Server container
+        run: docker stop $(docker ps -q --filter ancestor=perlak99/film-review-api:v1.0)
+
+      - name: Clean up Docker resources
+        run: docker system prune -f
