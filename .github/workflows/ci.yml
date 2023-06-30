@@ -43,7 +43,7 @@ jobs:
 
       - name: Test
         env:
-          TEST_DATABASE_CONNECTION_STRING: Server=localhost,1433;Database=your_database_name;User Id=sa;Password=admin;
+          TEST_DATABASE_CONNECTION_STRING: Server=localhost,1433;Database=filmReviewTestDb;User Id=sa;Password=admin;
         run: dotnet test
 
       - name: Stop Film Review API SQL Server container
