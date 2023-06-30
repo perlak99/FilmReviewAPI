@@ -21,12 +21,24 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --no-restore
+      - name: Start Database Container
+        env:
+          DOCKER_HUB_USERNAME: perlak99
+          IMAGE_NAME: film-review-api
+          IMAGE_TAG: v1.0
+          CONTAINER_NAME: filmreviewtestdb
+          DATABASE_NAME: filmReviewTestDb
+        run: |
+          docker pull $DOCKER_HUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+          docker run -d -p 1433:1433 --name $CONTAINER_NAME $DOCKER_HUB_USERNAME/$IMAGE_NAME:$IMAGE_TAG
+          sleep 10  # Give some time for the container to start
+          docker ps -a  # Print container details for debugging
       - name: Test
         env:
           TEST_DATABASE_CONNECTION_STRING: 'Server=localhost,1433;Database=filmReviewTestDb;User Id=sa;Password=admin;'
         run: |
-          docker pull perlak99/film-review-api:v1.0  # Pull the database image
-          docker run -d -p 1433:1433 --name filmreviewtestdb perlak99/film-review-api:v1.0  # Run the database container
-          dotnet test --configuration Release --logger "trx;LogFileName=testresults.trx" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/Coverage/  # Run the tests
-          docker stop filmreviewtestdb  # Stop the database container
-          docker rm filmreviewtestdb  # Remove the database container
+          dotnet test --configuration Release --logger "trx;LogFileName=testresults.trx" /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=./TestResults/Coverage/
+      - name: Stop and Remove Database Container
+        run: |
+          docker stop $CONTAINER_NAME
+          docker rm $CONTAINER_NAME
