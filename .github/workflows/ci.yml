@@ -40,6 +40,18 @@ jobs:
       - name: Wait for SQL Server to start
         run: |
           timeout 15 bash -c "until echo > /dev/tcp/localhost/1433; do sleep 5; done"
+          
+      - name: Check Port Connectivity
+        run: |
+          # Replace "YOUR_CONTAINER_PORT" with the port number exposed by the container.
+          # In your case, it seems to be 1433, but change it if needed.
+          PORT=1433
+          
+          # Wait for a few seconds to allow the container to start properly
+          sleep 10
+          
+          # Use netcat (nc) to check if the port is accessible
+          nc -zv localhost $PORT
 
       - name: Test
         env:
