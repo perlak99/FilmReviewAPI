@@ -27,9 +27,6 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Set up Docker
-        uses: docker/setup-docker@v1
-
       - name: Pull Film Review API SQL Server image
         run: docker pull perlak99/film-review-api:v1.0
 
