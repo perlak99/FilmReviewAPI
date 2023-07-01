@@ -20,7 +20,7 @@ jobs:
           - 1433:1433
         env:
           ACCEPT_EULA: Y
-          SA_PASSWORD: admin
+          SA_PASSWORD: Pa$$w0rD
 
     steps:
       - uses: actions/checkout@v2
@@ -41,5 +41,5 @@ jobs:
 
       - name: Test
         env:
-          TEST_DATABASE_CONNECTION_STRING: Server=localhost,1433;Database=filmReviewTestDb;User Id=sa;Password=admin;
+          TEST_DATABASE_CONNECTION_STRING: Server=localhost,1433;Database=msdb;User Id=sa;Password=Pa$$w0rD;
         run: dotnet test
