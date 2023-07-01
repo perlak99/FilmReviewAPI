@@ -13,6 +13,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    services:
+      sql-server:
+        image: perlak99/film-review-api:v1.0
+        ports:
+          - 1433:1433
+        env:
+          ACCEPT_EULA: Y
+          SA_PASSWORD: admin
+
     steps:
       - uses: actions/checkout@v2
 
@@ -27,39 +36,7 @@ jobs:
       - name: Build
         run: dotnet build --no-restore
 
-      - name: Pull Film Review API SQL Server image
-        run: docker pull perlak99/film-review-api:v1.0
-
-      - name: Start Film Review API SQL Server container
-        run: |
-          docker run -e 'ACCEPT_EULA=Y' \
-                     -e 'SA_PASSWORD=admin' \
-                     -p 1433:1433 \
-                     -d perlak99/film-review-api:v1.0
-
-      - name: Wait for SQL Server to start
-        run: |
-          timeout 15 bash -c "until echo > /dev/tcp/localhost/1433; do sleep 5; done"
-          
-      - name: Check Port Connectivity
-        run: |
-          # Replace "YOUR_CONTAINER_PORT" with the port number exposed by the container.
-          # In your case, it seems to be 1433, but change it if needed.
-          PORT=1433
-          
-          # Wait for a few seconds to allow the container to start properly
-          sleep 10
-          
-          # Use netcat (nc) to check if the port is accessible
-          nc -zv localhost $PORT
-
       - name: Test
         env:
           TEST_DATABASE_CONNECTION_STRING: Server=localhost,1433;Database=filmReviewTestDb;User Id=sa;Password=admin;
         run: dotnet test
-
-      - name: Stop Film Review API SQL Server container
-        run: docker stop $(docker ps -q --filter ancestor=perlak99/film-review-api:v1.0)
-
-      - name: Clean up Docker resources
-        run: docker system prune -f
