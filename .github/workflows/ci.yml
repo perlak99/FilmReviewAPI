@@ -1,53 +1,27 @@
 name: CI
-
 on:
   push:
     branches:
-      - master
+    - master
   pull_request:
     branches:
-      - master
+    - master
   workflow_dispatch:
-
+  
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
-
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v3.2.0
         with:
           dotnet-version: 6.0.x
-
       - name: Restore dependencies
         run: dotnet restore
-
       - name: Build
         run: dotnet build --no-restore
-
-      - name: Pull Film Review API SQL Server image
-        run: docker pull perlak99/film-review-api:v1.0
-
-      - name: Start Film Review API SQL Server container
-        run: |
-          docker run -e 'ACCEPT_EULA=Y' \
-                     -e 'SA_PASSWORD=admin' \
-                     -p 1433:1433 \
-                     -d perlak99/film-review-api:v1.0
-
-      - name: Wait for SQL Server to start
-        run: |
-          timeout 15 bash -c "until echo > /dev/tcp/localhost/1433; do sleep 5; done"
-
       - name: Test
         env:
-          TEST_DATABASE_CONNECTION_STRING: Server=localhost,1433;Database=filmReviewTestDb;User Id=sa;Password=admin;
+          TEST_DATABASE_CONNECTION_STRING: ${{ secrets.TEST_DATABASE_CONNECTION_STRING }}
         run: dotnet test
-
-      - name: Stop Film Review API SQL Server container
-        run: docker stop $(docker ps -q --filter ancestor=perlak99/film-review-api:v1.0)
-
-      - name: Clean up Docker resources
-        run: docker system prune -f
