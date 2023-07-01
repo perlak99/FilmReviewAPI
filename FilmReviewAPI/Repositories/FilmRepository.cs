@@ -19,11 +19,13 @@ namespace FilmReviewAPI.Repositories
                 .Include(f => f.Genre)
                 .Include(f => f.Director)
                 .Include(f => f.Ratings)
+                .Where(f => f.Title.Contains(filter.SearchPhrase), filter.SearchPhrase != null)
                 .Where(f => f.DirectorId == filter.DirectorId, filter.DirectorId != null)
                 .Where(f => f.GenreId == filter.GenreId, filter.GenreId != null)
                 .Where(f => f.ReleaseYear >= filter.ReleaseYearFrom, filter.ReleaseYearFrom != null)
                 .Where(f => f.ReleaseYear <= filter.ReleaseYearTo, filter.ReleaseYearTo != null)
                 .Where(f => f.Ratings.Average(x => x.Value) >= filter.MinAverageRating, filter.MinAverageRating != null)
+                .Where(x => x.Status == Enums.StatusEnum.Accepted)
                 .Skip(filter.PageSize * (filter.Page - 1))
                 .Take(filter.PageSize);
 

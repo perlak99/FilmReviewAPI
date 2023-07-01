@@ -13,6 +13,7 @@ namespace FilmReviewAPI.Repositories
         public async Task<List<Director>> GetDirectors()
         {
             return await _dbContext.Directors
+                .Where(x => x.Status == Enums.StatusEnum.Accepted)
                 .ToListAsync();
         }
     }

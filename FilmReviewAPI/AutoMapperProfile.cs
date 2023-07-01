@@ -29,6 +29,7 @@ namespace FilmReviewAPI
 
             //Director
             CreateMap<AddDirectorDto, Director>();
+            CreateMap<Director, SimpleDirectorDto>();
         }
     }
 }
