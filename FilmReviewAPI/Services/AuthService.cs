@@ -60,7 +60,7 @@ namespace FilmReviewAPI.Services
 
         public async Task<User> RegisterUserAsync(string username, string password)
         {
-            if (!await _userRepository.CheckIfExistsByUsername(username))
+            if (await _userRepository.CheckIfExistsByUsername(username))
             {
                 throw new ArgumentException("Username is already taken");
             }
