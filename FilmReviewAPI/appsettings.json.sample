@@ -7,6 +7,10 @@
     "Issuer": "https://localhost:7130/",
     "Audience": "https://localhost:7130/"
   },
+  "EmailService": {
+    "Email": "",
+    "Password": ""
+  }
   "Logging": {
     "LogLevel": {
       "Default": "Information",

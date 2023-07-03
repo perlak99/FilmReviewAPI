@@ -58,11 +58,16 @@ namespace FilmReviewAPI.Services
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<User> RegisterUserAsync(string username, string password)
+        public async Task<User> RegisterUserAsync(string username, string password, string email)
         {
             if (await _userRepository.CheckIfExistsByUsername(username))
             {
                 throw new ArgumentException("Username is already taken");
+            }
+
+            if (await _userRepository.CheckIfExistsByEmail(email))
+            {
+                throw new ArgumentException("Email is already assigned to account");
             }
 
             PasswordHashUtils.CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
@@ -71,7 +76,8 @@ namespace FilmReviewAPI.Services
             {
                 Username = username,
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
+                PasswordSalt = passwordSalt,
+                Email = email
             };
 
             var userRole = await _roleRepository.GetRoleByNameAsync("User");

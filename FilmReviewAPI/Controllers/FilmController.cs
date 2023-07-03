@@ -21,7 +21,7 @@ namespace FilmReviewAPI.Controllers
             _memoryCache = memoryCache;
         }
 
-        [HttpPost("addFilm"), Authorize(Roles = "Admin")]
+        [HttpPost("addFilm"), Authorize()]
         public async Task<ActionResult<BaseResponse>> AddFilm (AddFilmDto filmDto)
         {
             var userId = int.Parse(User.Claims.First(i => i.Type == ClaimTypes.NameIdentifier).Value);

@@ -22,6 +22,11 @@ namespace FilmReviewAPI.Repositories
             return await _dbContext.Users.AnyAsync(x => x.Username == username);
         }
 
+        public async Task<bool> CheckIfExistsByEmail(string email)
+        {
+            return await _dbContext.Users.AnyAsync(x => x.Email == email);
+        }
+
         public async Task<User> GetUserWithRolesByUsernameAsync(string username)
         {
             return await _dbContext.Users

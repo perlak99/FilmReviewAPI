@@ -1,6 +1,7 @@
 ﻿using FilmReviewAPI.Response;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace FilmReviewAPI.Middleware
@@ -19,6 +20,10 @@ namespace FilmReviewAPI.Middleware
             try
             {
                 await _next(httpContext);
+            }
+            catch (ValidationException ex)
+            {
+                await WriteErrorDetailsAsync(httpContext, ex.Message, (int)HttpStatusCode.BadRequest);
             }
             catch (ArgumentException ex)
             {

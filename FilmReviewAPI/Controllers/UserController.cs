@@ -27,7 +27,7 @@ namespace FilmReviewAPI.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<BaseResponse>> RegisterAsync(RegisterDto request)
         {
-            var user = await _authService.RegisterUserAsync(request.Username, request.Password);
+            await _authService.RegisterUserAsync(request.Username, request.Password, request.Email);
             return Ok(ResponseFactory.CreateSuccessResponse());
         }
 
